@@ -1,15 +1,9 @@
 package payment
 
-type Payment interface {
-	MakePayment(amount int) error
+type PaymentInterface interface {
+	MakePayment()
 }
 
-type NewPaymentClient struct {
-	Id string
-}
+func NewPaymentInterface() PaymentInterface {
 
-func PaymentClient(id string) *NewPaymentClient {
-	return &NewPaymentClient{
-		Id: id,
-	}
 }
