@@ -1,6 +1,10 @@
 package payment
 
-import "fmt"
+import (
+	"fmt"
+	"SaaStack/core"
+	"SaaStack/interfaces/payment"
+)
 
 type Stripe struct {
 }

@@ -1,6 +1,10 @@
 package email
 
-import "fmt"
+import (
+	"fmt"
+	"SaaStack/core"
+	"SaaStack/interfaces/email"
+)
 
 type MailGun struct{}
 
