@@ -2,16 +2,19 @@ package email
 
 import (
 	"fmt"
-	"SaaStack/core"
-	"SaaStack/interfaces/email"
+	"saastack/core/types"
 )
 
 type MailGun struct{}
 
-func NewMailGun() MailGun {
-	return MailGun{}
+func (p *MailGun) Run(request types.InterfaceRequestData) types.ResponseData {
+	fmt.Println("Data :", request)
+	response := types.ResponseData{
+		Msg: "MailGun: sent Email",
+	}
+	return response
 }
 
-func (p MailGun) SendEmail() {
-	fmt.Println("MailGun: sent EMail")
+func NewMailGun() *MailGun {
+	return &MailGun{}
 }

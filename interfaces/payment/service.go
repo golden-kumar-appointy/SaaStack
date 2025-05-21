@@ -1,12 +1,29 @@
 package payment
 
 import (
-	"SaaStack/core"
+	"saastack/core/types"
+	"saastack/plugins"
+	"saastack/plugins/payment"
 )
-type PaymentInterface interface {
-	MakePayment()
-}
 
-func NewPaymentInterface() PaymentInterface {
+const (
+	RAZORPAY = "razorpay"
+	STRIPE   = "stripe"
+)
 
+func NewPaymentInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {
+	var client types.InterfaceHandler
+
+	switch request.PluginId {
+	case RAZORPAY:
+		client = payment.NewRazorPayClient()
+
+	case STRIPE:
+		client = payment.NewStripeClient()
+
+	default:
+		client = plugins.NewUnimplementedEmail()
+	}
+
+	return &client
 }

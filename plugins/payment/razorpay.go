@@ -2,16 +2,20 @@ package payment
 
 import (
 	"fmt"
-	"SaaStack/core"
-	"SaaStack/interfaces/payment"
+	"saastack/core/types"
 )
 
-type Razorpay struct {
+type Razorpay struct{}
+
+func (p *Razorpay) Run(request types.InterfaceRequestData) types.ResponseData {
+	fmt.Println("Data :", request)
+	response := types.ResponseData{
+		Msg: "Razorpay: Payment Send",
+	}
+
+	return response
 }
 
-func NewRazorpay() Razorpay {
-	return Razorpay{}
-}
-func (p Razorpay) MakePayment() {
-	fmt.Println("Razorpay: Payment Made")
+func NewRazorPayClient() *Razorpay {
+	return &Razorpay{}
 }

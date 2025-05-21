@@ -2,16 +2,19 @@ package email
 
 import (
 	"fmt"
-	"SaaStack/core"
-	"SaaStack/interfaces/email"
+	"saastack/core/types"
 )
 
 type AmazonSES struct{}
 
-func NewAmazonSES() AmazonSES {
-	return AmazonSES{}
+func (p *AmazonSES) Run(request types.InterfaceRequestData) types.ResponseData {
+	fmt.Println("Data :", request)
+	response := types.ResponseData{
+		Msg: "AmazonSES: sent Email",
+	}
+	return response
 }
 
-func (p AmazonSES) SendEmail() {
-	fmt.Println("AmazonSES: sent EMail")
+func NewAmazonSES() *AmazonSES {
+	return &AmazonSES{}
 }

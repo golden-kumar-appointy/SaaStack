@@ -2,16 +2,20 @@ package payment
 
 import (
 	"fmt"
-	"SaaStack/core"
-	"SaaStack/interfaces/payment"
+	"saastack/core/types"
 )
 
-type Stripe struct {
+type Stripe struct{}
+
+func (p *Stripe) Run(request types.InterfaceRequestData) types.ResponseData {
+	fmt.Println("Data :", request)
+	response := types.ResponseData{
+		Msg: "Stripe: Payment Sent",
+	}
+
+	return response
 }
 
-func NewStripe() Stripe {
-	return Stripe{}
-}
-func (p Stripe) MakePayment() {
-	fmt.Println("Razorpay: Payment Made")
+func NewStripeClient() *Stripe {
+	return &Stripe{}
 }

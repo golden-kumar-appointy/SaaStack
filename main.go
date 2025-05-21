@@ -1,14 +1,21 @@
 package main
 
 import (
-	// Core
-	"SaaStack/core"
-	// Interfaces
-	"SaaStack/interfaces/email"
-	"SaaStack/interfaces/payment"
-	// Plugins
-	"SaaStack/plugins/email"
-	"SaaStack/plugins/payment"
+	"fmt"
+	"saastack/demo"
+	"time"
 )
 
-// makes the calls
+const SLEEP = time.Second * 3
+
+func main() {
+	fmt.Println("Demo1")
+	response := demo.SendEmailViaAWSSES()
+	fmt.Println("SendEmailViaAWSSES:\n", response)
+
+	time.Sleep(SLEEP)
+
+	fmt.Println("\nDemo2")
+	response = demo.SendEmailAndNotification()
+	fmt.Println("SendEmailAndNotification:\n", response)
+}

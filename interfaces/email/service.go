@@ -1,13 +1,29 @@
 package email
 
 import (
-	"SaaStack/core"
+	"saastack/core/types"
+	"saastack/plugins"
+	"saastack/plugins/email"
 )
 
-type EmailInterface interface {
-	SendEmail()
-}
+const (
+	AWSSES  = "awsses"
+	MAILGUN = "mailgun"
+)
 
-func NewEmailInterface() EmailInterface {
+func NewEmailInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {
+	var client types.InterfaceHandler
 
+	switch request.PluginId {
+	case AWSSES:
+		client = email.NewAmazonSES()
+
+	case MAILGUN:
+		client = email.NewMailGun()
+
+	default:
+		client = plugins.NewUnimplementedEmail()
+	}
+
+	return &client
 }
