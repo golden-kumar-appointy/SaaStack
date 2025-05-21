@@ -1,8 +1,9 @@
 package types
 
 const (
-	EmailInterfaceType   = "email"
-	PaymentInterfaceType = "payment"
+	EmailInterfaceType         = "email"
+	PaymentInterfaceType       = "payment"
+	UnimplementedInterfaceType = "unimplemented"
 )
 
 type InterfaceType string
@@ -18,7 +19,7 @@ type ResponseData struct {
 
 type InterfaceRequestData struct {
 	PluginId string
-	Data     any
+	Data     []byte
 }
 
 type InterfaceHandler interface {

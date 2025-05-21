@@ -8,7 +8,9 @@ import (
 type UnimplementedPlugin struct{}
 
 func (u *UnimplementedPlugin) Run(request types.InterfaceRequestData) types.ResponseData {
-	fmt.Println("Data :", request)
+	fmt.Println("PluginId :", request.PluginId)
+	fmt.Println("Data :", string(request.Data))
+
 	response := types.ResponseData{
 		Msg: "Plugin not implemented",
 	}

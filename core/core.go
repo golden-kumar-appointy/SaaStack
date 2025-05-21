@@ -18,7 +18,7 @@ func RunInterface(request types.RequestData) types.ResponseData {
 		client = *payment.NewPaymentInterfaceHandler(request.Params)
 
 	default:
-		client = interfaces.NewUnimplementedInterfaceHandlerClient()
+		client = interfaces.NewUnimplementedInterfaceHandlerClient(request.Params)
 	}
 
 	response := client.Run(request.Params)

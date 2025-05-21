@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	AWSSES  = "awsses"
-	MAILGUN = "mailgun"
+	AWSSES             = "awsses"
+	MAILGUN            = "mailgun"
+	UNIMPLEMENTEDEMAIL = "unimplementedEmail"
 )
 
 func NewEmailInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {

@@ -18,4 +18,16 @@ func main() {
 	fmt.Println("\nDemo2")
 	response = demo.SendEmailAndNotification()
 	fmt.Println("SendEmailAndNotification:\n", response)
+
+	time.Sleep(SLEEP)
+
+	fmt.Println("\nDemo3")
+	response = demo.UnimplementedInterfaceHandler()
+	fmt.Println("UnimplementedInterfaceHandler:\n", response)
+
+	time.Sleep(SLEEP)
+
+	fmt.Println("\nDemo4")
+	response = demo.UnimplementedInterfacePlugin()
+	fmt.Println("UnimplementedInterfacePlugin:\n", response)
 }

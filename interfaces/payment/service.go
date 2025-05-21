@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	RAZORPAY = "razorpay"
-	STRIPE   = "stripe"
+	RAZORPAY             = "razorpay"
+	STRIPE               = "stripe"
+	UNIMPLEMENTEDPAYMENT = "unimplementedPayment"
 )
 
 func NewPaymentInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {
