@@ -12,10 +12,10 @@ func RunInterface(request types.RequestData) types.ResponseData {
 
 	switch request.InterfaceType {
 	case types.EmailInterfaceType:
-		client = *email.NewEmailInterfaceHandler(request.Params)
+		client = email.NewEmailInterfaceHandler(request.Params)
 
 	case types.PaymentInterfaceType:
-		client = *payment.NewPaymentInterfaceHandler(request.Params)
+		client = payment.NewPaymentInterfaceHandler(request.Params)
 
 	default:
 		client = interfaces.NewUnimplementedInterfaceHandlerClient(request.Params)

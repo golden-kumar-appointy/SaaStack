@@ -8,7 +8,7 @@ import (
 
 type MailGun struct{}
 
-func (provider *MailGun) sendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
+func (provider *MailGun) SendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
 	fmt.Println("MailGun.sendEmail request:", request)
 
 	response := types.ResponseData{
@@ -28,7 +28,7 @@ func (p *MailGun) Run(request types.InterfaceRequestData) types.ResponseData {
 
 	switch request.Route {
 	case emailtypes.SendMailRoute:
-		response = p.sendEmail(data)
+		response = p.SendEmail(data)
 
 	default:
 		response.Msg = "Route not present"

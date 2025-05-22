@@ -8,7 +8,7 @@ import (
 
 type AmazonSES struct{}
 
-func (provider *AmazonSES) sendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
+func (provider *AmazonSES) SendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
 	fmt.Println("AmazonSES.sendEmail request:", request)
 
 	response := types.ResponseData{
@@ -28,7 +28,7 @@ func (p *AmazonSES) Run(request types.InterfaceRequestData) types.ResponseData {
 
 	switch request.Route {
 	case emailtypes.SendMailRoute:
-		response = p.sendEmail(data)
+		response = p.SendEmail(data)
 
 	default:
 		response.Msg = "Route not present"

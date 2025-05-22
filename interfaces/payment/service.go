@@ -2,6 +2,7 @@ package payment
 
 import (
 	"saastack/core/types"
+	paymenttypes "saastack/interfaces/payment/types"
 	"saastack/plugins"
 	"saastack/plugins/payment"
 )
@@ -12,8 +13,8 @@ const (
 	UNIMPLEMENTEDPAYMENT = "unimplementedPayment"
 )
 
-func NewPaymentInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {
-	var client types.InterfaceHandler
+func NewPaymentInterfaceHandler(request types.InterfaceRequestData) types.InterfaceHandler {
+	var client paymenttypes.PaymentInterfaceHandler
 
 	switch request.PluginId {
 	case RAZORPAY:
@@ -26,5 +27,5 @@ func NewPaymentInterfaceHandler(request types.InterfaceRequestData) *types.Inter
 		client = plugins.NewUnimplementedPlugin()
 	}
 
-	return &client
+	return client
 }

@@ -24,5 +24,5 @@ type InterfaceRequestData struct {
 }
 
 type InterfaceHandler interface {
-	Run(InterfaceRequestData) ResponseData
+	Run(request InterfaceRequestData) ResponseData
 }

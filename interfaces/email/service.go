@@ -2,6 +2,7 @@ package email
 
 import (
 	"saastack/core/types"
+	emailtypes "saastack/interfaces/email/types"
 	"saastack/plugins"
 	"saastack/plugins/email"
 )
@@ -12,8 +13,8 @@ const (
 	UNIMPLEMENTEDEMAIL = "unimplementedEmail"
 )
 
-func NewEmailInterfaceHandler(request types.InterfaceRequestData) *types.InterfaceHandler {
-	var client types.InterfaceHandler
+func NewEmailInterfaceHandler(request types.InterfaceRequestData) types.InterfaceHandler {
+	var client emailtypes.EmailInterfaceHandler
 
 	switch request.PluginId {
 	case AWSSES:
@@ -26,5 +27,5 @@ func NewEmailInterfaceHandler(request types.InterfaceRequestData) *types.Interfa
 		client = plugins.NewUnimplementedPlugin()
 	}
 
-	return &client
+	return client
 }

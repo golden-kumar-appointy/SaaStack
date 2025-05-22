@@ -1,10 +1,18 @@
 package payment
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"saastack/core/types"
+)
 
 const (
 	MakePaymentRoute = "makePayment"
 )
+
+type PaymentInterfaceHandler interface {
+	types.InterfaceHandler
+	MakePayment(request PaymentInterfaceData) types.ResponseData
+}
 
 type PaymentInterfaceData struct {
 	Amount   int
