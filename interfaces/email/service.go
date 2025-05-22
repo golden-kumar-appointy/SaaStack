@@ -23,7 +23,7 @@ func NewEmailInterfaceHandler(request types.InterfaceRequestData) *types.Interfa
 		client = email.NewMailGun()
 
 	default:
-		client = plugins.NewUnimplementedEmail()
+		client = plugins.NewUnimplementedPlugin()
 	}
 
 	return &client

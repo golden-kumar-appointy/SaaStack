@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"saastack/core"
 	"saastack/core/types"
-	"saastack/interfaces/datatypes"
 	"saastack/interfaces/email"
+	emailtypes "saastack/interfaces/email/types"
 	"saastack/interfaces/payment"
+	paymenttypes "saastack/interfaces/payment/types"
 )
 
 func SendEmailViaAWSSES() types.ResponseData {
-	emailData := datatypes.EmailInterfaceData{
+	emailData := emailtypes.EmailInterfaceData{
 		From: "abc@def.ghi",
 		To:   "jkl@mno.pqr",
 		Body: "stuvwxyz",
@@ -23,6 +24,7 @@ func SendEmailViaAWSSES() types.ResponseData {
 		Params: types.InterfaceRequestData{
 			PluginId: email.AWSSES,
 			Data:     data,
+			Route:    emailtypes.SendMailRoute,
 		},
 	}
 
@@ -32,7 +34,7 @@ func SendEmailViaAWSSES() types.ResponseData {
 }
 
 func SendEmailAndNotification() types.ResponseData {
-	paymentData := datatypes.PaymentInterfaceData{
+	paymentData := paymenttypes.PaymentInterfaceData{
 		Amount:   100,
 		ClientId: "client123",
 	}
@@ -43,13 +45,14 @@ func SendEmailAndNotification() types.ResponseData {
 		Params: types.InterfaceRequestData{
 			PluginId: payment.RAZORPAY,
 			Data:     data,
+			Route:    paymenttypes.MakePaymentRoute,
 		},
 	}
 
 	response := core.RunInterface(request)
 	fmt.Println("Payment Request response:", response)
 
-	emailData := datatypes.EmailInterfaceData{
+	emailData := emailtypes.EmailInterfaceData{
 		From: "abc@def.ghi",
 		To:   "jkl@mno.pqr",
 		Body: "stuvwxyz",
@@ -61,6 +64,7 @@ func SendEmailAndNotification() types.ResponseData {
 		Params: types.InterfaceRequestData{
 			PluginId: email.MAILGUN,
 			Data:     data,
+			Route:    emailtypes.SendMailRoute,
 		},
 	}
 

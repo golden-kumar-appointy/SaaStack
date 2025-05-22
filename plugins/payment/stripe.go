@@ -3,20 +3,35 @@ package payment
 import (
 	"fmt"
 	"saastack/core/types"
-	"saastack/interfaces/datatypes"
+	paymenttypes "saastack/interfaces/payment/types"
 )
 
 type Stripe struct{}
 
+func (provider *Stripe) MakePayment(request paymenttypes.PaymentInterfaceData) types.ResponseData {
+	fmt.Println("Stripe.MakePayment request:", request)
+
+	response := types.ResponseData{
+		Msg: "Razorpay: payment Made",
+	}
+	return response
+}
+
 func (p *Stripe) Run(request types.InterfaceRequestData) types.ResponseData {
-	var data datatypes.PaymentInterfaceData
+	var data paymenttypes.PaymentInterfaceData
 	data.Parse(request.Data)
 
 	fmt.Println("PluginId :", request.PluginId)
-	fmt.Println("Data :", data)
+	fmt.Println("Route :", request.Route)
 
-	response := types.ResponseData{
-		Msg: "Stripe: Payment Sent",
+	var response types.ResponseData
+
+	switch request.Route {
+	case paymenttypes.MakePaymentRoute:
+		response = p.MakePayment(data)
+
+	default:
+		response.Msg = "Route not present"
 	}
 
 	return response

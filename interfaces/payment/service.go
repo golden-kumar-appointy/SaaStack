@@ -23,7 +23,7 @@ func NewPaymentInterfaceHandler(request types.InterfaceRequestData) *types.Inter
 		client = payment.NewStripeClient()
 
 	default:
-		client = plugins.NewUnimplementedEmail()
+		client = plugins.NewUnimplementedPlugin()
 	}
 
 	return &client

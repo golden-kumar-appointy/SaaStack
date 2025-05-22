@@ -3,21 +3,37 @@ package email
 import (
 	"fmt"
 	"saastack/core/types"
-	"saastack/interfaces/datatypes"
+	emailtypes "saastack/interfaces/email/types"
 )
 
 type MailGun struct{}
 
+func (provider *MailGun) sendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
+	fmt.Println("MailGun.sendEmail request:", request)
+
+	response := types.ResponseData{
+		Msg: "Mailgun: sent Email",
+	}
+	return response
+}
+
 func (p *MailGun) Run(request types.InterfaceRequestData) types.ResponseData {
-	var data datatypes.EmailInterfaceData
+	var data emailtypes.EmailInterfaceData
 	data.Parse(request.Data)
 
 	fmt.Println("PluginId :", request.PluginId)
-	fmt.Println("Data :", data)
+	fmt.Println("Route :", request.Route)
 
-	response := types.ResponseData{
-		Msg: "MailGun: sent Email",
+	var response types.ResponseData
+
+	switch request.Route {
+	case emailtypes.SendMailRoute:
+		response = p.sendEmail(data)
+
+	default:
+		response.Msg = "Route not present"
 	}
+
 	return response
 }
 

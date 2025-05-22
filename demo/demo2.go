@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"saastack/core"
 	"saastack/core/types"
-	"saastack/interfaces/datatypes"
+	emailtypes "saastack/interfaces/email/types"
 )
 
 func UnimplementedInterfaceHandler() types.ResponseData {
-	emailData := datatypes.EmailInterfaceData{
+	emailData := emailtypes.EmailInterfaceData{
 		From: "abc@def.ghi",
 		To:   "jkl@mno.pqr",
 		Body: "stuvwxyz",
@@ -20,6 +20,7 @@ func UnimplementedInterfaceHandler() types.ResponseData {
 		Params: types.InterfaceRequestData{
 			PluginId: types.EmailInterfaceType,
 			Data:     data,
+			Route:    emailtypes.SendMailRoute,
 		},
 	}
 
@@ -28,7 +29,7 @@ func UnimplementedInterfaceHandler() types.ResponseData {
 }
 
 func UnimplementedInterfacePlugin() types.ResponseData {
-	emailData := datatypes.EmailInterfaceData{
+	emailData := emailtypes.EmailInterfaceData{
 		From: "abc@def.ghi",
 		To:   "jkl@mno.pqr",
 		Body: "stuvwxyz",
@@ -40,6 +41,7 @@ func UnimplementedInterfacePlugin() types.ResponseData {
 		Params: types.InterfaceRequestData{
 			PluginId: types.UnimplementedInterfaceType,
 			Data:     data,
+			Route:    emailtypes.SendMailRoute,
 		},
 	}
 

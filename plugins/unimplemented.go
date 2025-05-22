@@ -17,6 +17,6 @@ func (u *UnimplementedPlugin) Run(request types.InterfaceRequestData) types.Resp
 	return response
 }
 
-func NewUnimplementedEmail() *UnimplementedPlugin {
+func NewUnimplementedPlugin() *UnimplementedPlugin {
 	return &UnimplementedPlugin{}
 }

@@ -3,21 +3,37 @@ package email
 import (
 	"fmt"
 	"saastack/core/types"
-	"saastack/interfaces/datatypes"
+	emailtypes "saastack/interfaces/email/types"
 )
 
 type AmazonSES struct{}
 
-func (p *AmazonSES) Run(request types.InterfaceRequestData) types.ResponseData {
-	var data datatypes.EmailInterfaceData
-	data.Parse(request.Data)
-
-	fmt.Println("PluginId :", request.PluginId)
-	fmt.Println("Data :", data)
+func (provider *AmazonSES) sendEmail(request emailtypes.EmailInterfaceData) types.ResponseData {
+	fmt.Println("AmazonSES.sendEmail request:", request)
 
 	response := types.ResponseData{
 		Msg: "AmazonSES: sent Email",
 	}
+	return response
+}
+
+func (p *AmazonSES) Run(request types.InterfaceRequestData) types.ResponseData {
+	var data emailtypes.EmailInterfaceData
+	data.Parse(request.Data)
+
+	fmt.Println("PluginId :", request.PluginId)
+	fmt.Println("Route :", request.Route)
+
+	var response types.ResponseData
+
+	switch request.Route {
+	case emailtypes.SendMailRoute:
+		response = p.sendEmail(data)
+
+	default:
+		response.Msg = "Route not present"
+	}
+
 	return response
 }
 

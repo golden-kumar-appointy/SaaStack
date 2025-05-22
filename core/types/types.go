@@ -19,6 +19,7 @@ type ResponseData struct {
 
 type InterfaceRequestData struct {
 	PluginId string
+	Route    string
 	Data     []byte
 }
 
