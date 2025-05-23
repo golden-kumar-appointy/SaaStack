@@ -29,3 +29,7 @@ sequenceDiagram
   C ->> P : {reponse}
 
 ```
+
+## Architecture
+
+![SaaStack Architecture](./docs/public/architechture.svg)
