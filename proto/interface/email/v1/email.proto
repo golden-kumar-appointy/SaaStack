@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package email;
+
+option go_package = "saastack/gen/interface/email/v1;emailpb";
+
+message Request {}
+message Response {}
+
+service EmailService { rpc SendEmail(Request) returns (Response); }

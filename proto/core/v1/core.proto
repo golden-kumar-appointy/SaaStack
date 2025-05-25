@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package core.v1;
+
+option go_package = "saastack/gen/core/v1;corepb";
+
+message Request {}
+message Response {}
+
+service CoreService {
+  rpc EmailHandler(Request) returns (Response);
+
+  rpc PaymentHandler(Request) returns (Response);
+}

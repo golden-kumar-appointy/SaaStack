@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const SLEEP = time.Second * 2
+const SLEEP = time.Second * 1
 
 func main() {
 	fmt.Println("Demo1")

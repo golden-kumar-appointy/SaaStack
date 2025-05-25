@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "saastack/gen/interface/payment/v1;paymentpb";
+
+message Request {}
+message Response {}
+
+service PaymentService {
+  rpc MakePayment(Request) returns (Response);
+
+  rpc RefundPayment(Request) returns (Response);
+}
