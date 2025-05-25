@@ -2,13 +2,25 @@ syntax = "proto3";
 
 package core.v1;
 
-option go_package = "saastack/gen/core/v1;corepb";
+option go_package = "core/v1;corepb";
+
+import "google/api/annotations.proto";
 
 message Request {}
 message Response {}
 
 service CoreService {
-  rpc EmailHandler(Request) returns (Response);
+  rpc EmailHandler(Request) returns (Response){
+    option (google.api.http) = {
+      post: "/core/email"
+      body: "*"
+    };
+  };
 
-  rpc PaymentHandler(Request) returns (Response);
+  rpc PaymentHandler(Request) returns (Response){
+    option (google.api.http) = {
+      post: "/core/payment"
+      body: "*"
+    };
+  };
 }

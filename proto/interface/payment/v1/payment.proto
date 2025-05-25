@@ -2,13 +2,25 @@ syntax = "proto3";
 
 package payment;
 
-option go_package = "saastack/gen/interface/payment/v1;paymentpb";
+option go_package = "interface/payment/v1;paymentpb";
+
+import "google/api/annotations.proto";
 
 message Request {}
 message Response {}
 
 service PaymentService {
-  rpc MakePayment(Request) returns (Response);
+  rpc Charge(Request) returns (Response){
+    option (google.api.http) = {
+      post: "/payment/charge"
+      body: "*"
+    };
+  };
 
-  rpc RefundPayment(Request) returns (Response);
+  rpc Refund(Request) returns (Response){
+    option (google.api.http) = {
+      post: "/payment/refund"
+      body: "*"
+    };
+  };
 }

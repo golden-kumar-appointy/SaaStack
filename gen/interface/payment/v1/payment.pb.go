@@ -4,12 +4,13 @@
 // 	protoc        (unknown)
 // source: interface/payment/v1/payment.proto
 
-package paymentpb
+package v1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
 )
@@ -97,13 +98,14 @@ var File_interface_payment_v1_payment_proto protoreflect.FileDescriptor
 
 const file_interface_payment_v1_payment_proto_rawDesc = "" +
 	"\n" +
-	"\"interface/payment/v1/payment.proto\x12\apayment\"\t\n" +
+	"\"interface/payment/v1/payment.proto\x12\apayment\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2z\n" +
-	"\x0ePaymentService\x122\n" +
-	"\vMakePayment\x12\x10.payment.Request\x1a\x11.payment.Response\x124\n" +
-	"\rRefundPayment\x12\x10.payment.Request\x1a\x11.payment.ResponseB-Z+saastack/gen/interface/payment/v1;paymentpbb\x06proto3"
+	"\bResponse2\xa6\x01\n" +
+	"\x0ePaymentService\x12I\n" +
+	"\x06Charge\x12\x10.payment.Request\x1a\x11.payment.Response\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/payment/charge\x12I\n" +
+	"\x06Refund\x12\x10.payment.Request\x1a\x11.payment.Response\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/payment/refundBz\n" +
+	"\vcom.paymentB\fPaymentProtoP\x01Z!saastack/gen/interface/payment/v1\xa2\x02\x03PXX\xaa\x02\aPayment\xca\x02\aPayment\xe2\x02\x13Payment\\GPBMetadata\xea\x02\aPaymentb\x06proto3"
 
 var (
 	file_interface_payment_v1_payment_proto_rawDescOnce sync.Once
@@ -123,10 +125,10 @@ var file_interface_payment_v1_payment_proto_goTypes = []any{
 	(*Response)(nil), // 1: payment.Response
 }
 var file_interface_payment_v1_payment_proto_depIdxs = []int32{
-	0, // 0: payment.PaymentService.MakePayment:input_type -> payment.Request
-	0, // 1: payment.PaymentService.RefundPayment:input_type -> payment.Request
-	1, // 2: payment.PaymentService.MakePayment:output_type -> payment.Response
-	1, // 3: payment.PaymentService.RefundPayment:output_type -> payment.Response
+	0, // 0: payment.PaymentService.Charge:input_type -> payment.Request
+	0, // 1: payment.PaymentService.Refund:input_type -> payment.Request
+	1, // 2: payment.PaymentService.Charge:output_type -> payment.Response
+	1, // 3: payment.PaymentService.Refund:output_type -> payment.Response
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

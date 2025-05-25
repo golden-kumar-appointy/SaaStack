@@ -4,12 +4,13 @@
 // 	protoc        (unknown)
 // source: core/v1/core.proto
 
-package corepb
+package corev1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
 )
@@ -97,13 +98,14 @@ var File_core_v1_core_proto protoreflect.FileDescriptor
 
 const file_core_v1_core_proto_rawDesc = "" +
 	"\n" +
-	"\x12core/v1/core.proto\x12\acore.v1\"\t\n" +
+	"\x12core/v1/core.proto\x12\acore.v1\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2y\n" +
-	"\vCoreService\x123\n" +
-	"\fEmailHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\x125\n" +
-	"\x0ePaymentHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.ResponseB\x1dZ\x1bsaastack/gen/core/v1;corepbb\x06proto3"
+	"\bResponse2\xab\x01\n" +
+	"\vCoreService\x12K\n" +
+	"\fEmailHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/core/email\x12O\n" +
+	"\x0ePaymentHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/core/paymentBr\n" +
+	"\vcom.core.v1B\tCoreProtoP\x01Z\x1bsaastack/gen/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
 	file_core_v1_core_proto_rawDescOnce sync.Once

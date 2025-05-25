@@ -4,12 +4,13 @@
 // 	protoc        (unknown)
 // source: interface/email/v1/email.proto
 
-package emailpb
+package v1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
 )
@@ -97,12 +98,14 @@ var File_interface_email_v1_email_proto protoreflect.FileDescriptor
 
 const file_interface_email_v1_email_proto_rawDesc = "" +
 	"\n" +
-	"\x1einterface/email/v1/email.proto\x12\x05email\"\t\n" +
+	"\x1einterface/email/v1/email.proto\x12\x05email\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2<\n" +
-	"\fEmailService\x12,\n" +
-	"\tSendEmail\x12\x0e.email.Request\x1a\x0f.email.ResponseB)Z'saastack/gen/interface/email/v1;emailpbb\x06proto3"
+	"\bResponse2T\n" +
+	"\fEmailService\x12D\n" +
+	"\tSendEmail\x12\x0e.email.Request\x1a\x0f.email.Response\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/email/sendBl\n" +
+	"\tcom.emailB\n" +
+	"EmailProtoP\x01Z\x1fsaastack/gen/interface/email/v1\xa2\x02\x03EXX\xaa\x02\x05Email\xca\x02\x05Email\xe2\x02\x11Email\\GPBMetadata\xea\x02\x05Emailb\x06proto3"
 
 var (
 	file_interface_email_v1_email_proto_rawDescOnce sync.Once

@@ -2,9 +2,18 @@ syntax = "proto3";
 
 package email;
 
-option go_package = "saastack/gen/interface/email/v1;emailpb";
+option go_package = "interface/email/v1;emailpb";
+
+import "google/api/annotations.proto";
 
 message Request {}
 message Response {}
 
-service EmailService { rpc SendEmail(Request) returns (Response); }
+service EmailService { 
+  rpc SendEmail(Request) returns (Response){
+    option (google.api.http) = {
+      post: "/email/send"
+      body: "*"
+    };
+  };
+}
