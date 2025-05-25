@@ -1,31 +1,61 @@
-package payment
+package service
 
 import (
-	"saastack/core/types"
-	paymenttypes "saastack/interfaces/payment/types"
-	"saastack/plugins"
+	"context"
+	"log"
+	corev1 "saastack/gen/core/v1"
+	"saastack/interfaces"
+	"saastack/interfaces/payment/types"
 	"saastack/plugins/payment"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-const (
-	RAZORPAY             = "razorpay"
-	STRIPE               = "stripe"
-	UNIMPLEMENTEDPAYMENT = "unimplementedPayment"
-)
+var pluginClient map[interfaces.PluginID]types.PaymentPlugin = make(map[interfaces.PluginID]types.PaymentPlugin)
 
-func NewPaymentInterfaceHandler(request types.InterfaceRequestData) types.InterfaceHandler {
-	var client paymenttypes.PaymentInterfaceHandler
+func init() {
+	// Razor Pay Client
+	razorpayClient := payment.NewRazorPayClient()
+	pluginClient[types.RAZORPAY] = razorpayClient
 
-	switch request.PluginId {
-	case RAZORPAY:
-		client = payment.NewRazorPayClient()
+	// Stripe Client
+	stripeClient := payment.NewStripeClient()
+	pluginClient[types.STRIPE] = stripeClient
+}
 
-	case STRIPE:
-		client = payment.NewStripeClient()
+type PaymentService struct {
+	corev1.UnimplementedPaymentServiceServer
+}
 
-	default:
-		client = plugins.NewUnimplementedPlugin()
+func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePaymentRequest) (*corev1.Response, error) {
+	log.Println("Payment Charge req :", req)
+
+	client, ok := pluginClient[interfaces.PluginID(req.PluginId)]
+	if !ok {
+		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	return client
+	response, err := client.Charge(req.Data)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Internal Server Error")
+	}
+
+	return response, nil
+}
+
+func (payment *PaymentService) Refund(_ context.Context, req *corev1.RefundPaymentRequest) (*corev1.Response, error) {
+	log.Println("Payment Refund req :", req)
+
+	client, ok := pluginClient[interfaces.PluginID(req.PluginId)]
+	if !ok {
+		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
+	}
+
+	response, err := client.Refund(req.Data)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Internal Server Error")
+	}
+
+	return response, nil
 }

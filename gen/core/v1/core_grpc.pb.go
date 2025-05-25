@@ -8,7 +8,6 @@ package corev1
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,140 +19,249 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CoreService_EmailHandler_FullMethodName   = "/core.v1.CoreService/EmailHandler"
-	CoreService_PaymentHandler_FullMethodName = "/core.v1.CoreService/PaymentHandler"
+	EmailService_SendEmail_FullMethodName = "/core.v1.EmailService/SendEmail"
 )
 
-// CoreServiceClient is the client API for CoreService service.
+// EmailServiceClient is the client API for EmailService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CoreServiceClient interface {
-	EmailHandler(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-	PaymentHandler(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+//
+// Email Interface service
+type EmailServiceClient interface {
+	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
-type coreServiceClient struct {
+type emailServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCoreServiceClient(cc grpc.ClientConnInterface) CoreServiceClient {
-	return &coreServiceClient{cc}
+func NewEmailServiceClient(cc grpc.ClientConnInterface) EmailServiceClient {
+	return &emailServiceClient{cc}
 }
 
-func (c *coreServiceClient) EmailHandler(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *emailServiceClient) SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, CoreService_EmailHandler_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, EmailService_SendEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *coreServiceClient) PaymentHandler(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
-	err := c.cc.Invoke(ctx, CoreService_PaymentHandler_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// CoreServiceServer is the server API for CoreService service.
-// All implementations must embed UnimplementedCoreServiceServer
+// EmailServiceServer is the server API for EmailService service.
+// All implementations must embed UnimplementedEmailServiceServer
 // for forward compatibility.
-type CoreServiceServer interface {
-	EmailHandler(context.Context, *Request) (*Response, error)
-	PaymentHandler(context.Context, *Request) (*Response, error)
-	mustEmbedUnimplementedCoreServiceServer()
+//
+// Email Interface service
+type EmailServiceServer interface {
+	SendEmail(context.Context, *SendEmailRequest) (*Response, error)
+	mustEmbedUnimplementedEmailServiceServer()
 }
 
-// UnimplementedCoreServiceServer must be embedded to have
+// UnimplementedEmailServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCoreServiceServer struct{}
+type UnimplementedEmailServiceServer struct{}
 
-func (UnimplementedCoreServiceServer) EmailHandler(context.Context, *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EmailHandler not implemented")
+func (UnimplementedEmailServiceServer) SendEmail(context.Context, *SendEmailRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendEmail not implemented")
 }
+func (UnimplementedEmailServiceServer) mustEmbedUnimplementedEmailServiceServer() {}
+func (UnimplementedEmailServiceServer) testEmbeddedByValue()                      {}
 
-func (UnimplementedCoreServiceServer) PaymentHandler(context.Context, *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PaymentHandler not implemented")
-}
-func (UnimplementedCoreServiceServer) mustEmbedUnimplementedCoreServiceServer() {}
-func (UnimplementedCoreServiceServer) testEmbeddedByValue()                     {}
-
-// UnsafeCoreServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CoreServiceServer will
+// UnsafeEmailServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to EmailServiceServer will
 // result in compilation errors.
-type UnsafeCoreServiceServer interface {
-	mustEmbedUnimplementedCoreServiceServer()
+type UnsafeEmailServiceServer interface {
+	mustEmbedUnimplementedEmailServiceServer()
 }
 
-func RegisterCoreServiceServer(s grpc.ServiceRegistrar, srv CoreServiceServer) {
-	// If the following call pancis, it indicates UnimplementedCoreServiceServer was
+func RegisterEmailServiceServer(s grpc.ServiceRegistrar, srv EmailServiceServer) {
+	// If the following call pancis, it indicates UnimplementedEmailServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CoreService_ServiceDesc, srv)
+	s.RegisterService(&EmailService_ServiceDesc, srv)
 }
 
-func _CoreService_EmailHandler_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+func _EmailService_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServiceServer).EmailHandler(ctx, in)
+		return srv.(EmailServiceServer).SendEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CoreService_EmailHandler_FullMethodName,
+		FullMethod: EmailService_SendEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServiceServer).EmailHandler(ctx, req.(*Request))
+		return srv.(EmailServiceServer).SendEmail(ctx, req.(*SendEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CoreService_PaymentHandler_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CoreServiceServer).PaymentHandler(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CoreService_PaymentHandler_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServiceServer).PaymentHandler(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// CoreService_ServiceDesc is the grpc.ServiceDesc for CoreService service.
+// EmailService_ServiceDesc is the grpc.ServiceDesc for EmailService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CoreService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "core.v1.CoreService",
-	HandlerType: (*CoreServiceServer)(nil),
+var EmailService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "core.v1.EmailService",
+	HandlerType: (*EmailServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "EmailHandler",
-			Handler:    _CoreService_EmailHandler_Handler,
+			MethodName: "SendEmail",
+			Handler:    _EmailService_SendEmail_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "core/v1/core.proto",
+}
+
+const (
+	PaymentService_Charge_FullMethodName = "/core.v1.PaymentService/Charge"
+	PaymentService_Refund_FullMethodName = "/core.v1.PaymentService/Refund"
+)
+
+// PaymentServiceClient is the client API for PaymentService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Payment Interface Service
+type PaymentServiceClient interface {
+	Charge(ctx context.Context, in *ChargePaymentRequest, opts ...grpc.CallOption) (*Response, error)
+	Refund(ctx context.Context, in *RefundPaymentRequest, opts ...grpc.CallOption) (*Response, error)
+}
+
+type paymentServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewPaymentServiceClient(cc grpc.ClientConnInterface) PaymentServiceClient {
+	return &paymentServiceClient{cc}
+}
+
+func (c *paymentServiceClient) Charge(ctx context.Context, in *ChargePaymentRequest, opts ...grpc.CallOption) (*Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, PaymentService_Charge_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentServiceClient) Refund(ctx context.Context, in *RefundPaymentRequest, opts ...grpc.CallOption) (*Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, PaymentService_Refund_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PaymentServiceServer is the server API for PaymentService service.
+// All implementations must embed UnimplementedPaymentServiceServer
+// for forward compatibility.
+//
+// Payment Interface Service
+type PaymentServiceServer interface {
+	Charge(context.Context, *ChargePaymentRequest) (*Response, error)
+	Refund(context.Context, *RefundPaymentRequest) (*Response, error)
+	mustEmbedUnimplementedPaymentServiceServer()
+}
+
+// UnimplementedPaymentServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedPaymentServiceServer struct{}
+
+func (UnimplementedPaymentServiceServer) Charge(context.Context, *ChargePaymentRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Charge not implemented")
+}
+func (UnimplementedPaymentServiceServer) Refund(context.Context, *RefundPaymentRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refund not implemented")
+}
+func (UnimplementedPaymentServiceServer) mustEmbedUnimplementedPaymentServiceServer() {}
+func (UnimplementedPaymentServiceServer) testEmbeddedByValue()                        {}
+
+// UnsafePaymentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PaymentServiceServer will
+// result in compilation errors.
+type UnsafePaymentServiceServer interface {
+	mustEmbedUnimplementedPaymentServiceServer()
+}
+
+func RegisterPaymentServiceServer(s grpc.ServiceRegistrar, srv PaymentServiceServer) {
+	// If the following call pancis, it indicates UnimplementedPaymentServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&PaymentService_ServiceDesc, srv)
+}
+
+func _PaymentService_Charge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChargePaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).Charge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_Charge_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).Charge(ctx, req.(*ChargePaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentService_Refund_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefundPaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).Refund(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_Refund_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).Refund(ctx, req.(*RefundPaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// PaymentService_ServiceDesc is the grpc.ServiceDesc for PaymentService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var PaymentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "core.v1.PaymentService",
+	HandlerType: (*PaymentServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Charge",
+			Handler:    _PaymentService_Charge_Handler,
 		},
 		{
-			MethodName: "PaymentHandler",
-			Handler:    _CoreService_PaymentHandler_Handler,
+			MethodName: "Refund",
+			Handler:    _PaymentService_Refund_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

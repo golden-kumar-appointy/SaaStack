@@ -6,20 +6,65 @@ option go_package = "core/v1;corepb";
 
 import "google/api/annotations.proto";
 
-message Request {}
-message Response {}
+message Response {
+  string Msg = 1;
+}
 
-service CoreService {
-  rpc EmailHandler(Request) returns (Response){
+message SendEmailRequest {
+  string pluginId = 1;
+  
+  message SendEmailData {
+    string From = 1;
+    string To = 2;
+    string Body = 3;
+  }
+  SendEmailData data = 2;
+}
+
+// Email Interface service
+service EmailService { 
+  rpc SendEmail(SendEmailRequest) returns (Response){
     option (google.api.http) = {
-      post: "/core/email/*"
+      post: "/v1/email/send"
+      body: "*"
+    };
+  };
+}
+
+message ChargePaymentRequest {
+  string pluginId = 1;
+
+  message ChargeData {
+    int64 Amount = 1;
+    string ClientId = 2;
+  }
+  ChargeData data = 2;
+}
+
+message RefundPaymentRequest {
+  string pluginId = 1;
+
+  message RefundData {
+    string paymentId = 1;
+    int64 Amount = 2;
+  }
+  RefundData data = 2;
+}
+
+
+
+// Payment Interface Service
+service PaymentService {
+  rpc Charge(ChargePaymentRequest) returns (Response){
+    option (google.api.http) = {
+      post: "/v1/payment/charge"
       body: "*"
     };
   };
 
-  rpc PaymentHandler(Request) returns (Response){
+  rpc Refund(RefundPaymentRequest) returns (Response){
     option (google.api.http) = {
-      post: "/core/payment/*"
+      post: "/v1/payment/refund"
       body: "*"
     };
   };

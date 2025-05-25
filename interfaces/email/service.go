@@ -1,31 +1,45 @@
-package email
+package service
 
 import (
-	"saastack/core/types"
-	emailtypes "saastack/interfaces/email/types"
-	"saastack/plugins"
+	"context"
+	"fmt"
+	corev1 "saastack/gen/core/v1"
+	"saastack/interfaces"
+	"saastack/interfaces/email/types"
 	"saastack/plugins/email"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-const (
-	AWSSES             = "awsses"
-	MAILGUN            = "mailgun"
-	UNIMPLEMENTEDEMAIL = "unimplementedEmail"
-)
+var pluginClient map[interfaces.PluginID]types.EmailPlugin = make(map[interfaces.PluginID]types.EmailPlugin)
 
-func NewEmailInterfaceHandler(request types.InterfaceRequestData) types.InterfaceHandler {
-	var client emailtypes.EmailInterfaceHandler
+func init() {
+	// AWS Client
+	awsSESClient := email.NewAmazonSES()
+	pluginClient[types.AWSSES] = awsSESClient
 
-	switch request.PluginId {
-	case AWSSES:
-		client = email.NewAmazonSES()
+	// Mailgun Client
+	mailgunClient := email.NewMailGun()
+	pluginClient[types.MAILGUN] = mailgunClient
+}
 
-	case MAILGUN:
-		client = email.NewMailGun()
+type EmailService struct {
+	corev1.UnimplementedEmailServiceServer
+}
 
-	default:
-		client = plugins.NewUnimplementedPlugin()
+func (email *EmailService) SendEmail(_ context.Context, req *corev1.SendEmailRequest) (*corev1.Response, error) {
+	fmt.Println("Email Service Req: ", req)
+
+	client, ok := pluginClient[interfaces.PluginID(req.PluginId)]
+	if !ok {
+		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	return client
+	response, err := client.SendEmail(req.Data)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Internal Server Error")
+	}
+
+	return response, nil
 }

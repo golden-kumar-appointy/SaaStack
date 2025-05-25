@@ -6,7 +6,10 @@
   },
   "tags": [
     {
-      "name": "CoreService"
+      "name": "EmailService"
+    },
+    {
+      "name": "PaymentService"
     }
   ],
   "consumes": [
@@ -16,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/core/email/*": {
+    "/v1/email/send": {
       "post": {
-        "operationId": "CoreService_EmailHandler",
+        "operationId": "EmailService_SendEmail",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/corev1Response"
+              "$ref": "#/definitions/v1Response"
             }
           },
           "default": {
@@ -39,23 +42,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/corev1Request"
+              "$ref": "#/definitions/v1SendEmailRequest"
             }
           }
         ],
         "tags": [
-          "CoreService"
+          "EmailService"
         ]
       }
     },
-    "/core/payment/*": {
+    "/v1/payment/charge": {
       "post": {
-        "operationId": "CoreService_PaymentHandler",
+        "operationId": "PaymentService_Charge",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/corev1Response"
+              "$ref": "#/definitions/v1Response"
             }
           },
           "default": {
@@ -71,22 +74,86 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/corev1Request"
+              "$ref": "#/definitions/v1ChargePaymentRequest"
             }
           }
         ],
         "tags": [
-          "CoreService"
+          "PaymentService"
+        ]
+      }
+    },
+    "/v1/payment/refund": {
+      "post": {
+        "operationId": "PaymentService_Refund",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RefundPaymentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PaymentService"
         ]
       }
     }
   },
   "definitions": {
-    "corev1Request": {
-      "type": "object"
+    "ChargePaymentRequestChargeData": {
+      "type": "object",
+      "properties": {
+        "Amount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ClientId": {
+          "type": "string"
+        }
+      }
     },
-    "corev1Response": {
-      "type": "object"
+    "RefundPaymentRequestRefundData": {
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "type": "string"
+        },
+        "Amount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "SendEmailRequestSendEmailData": {
+      "type": "object",
+      "properties": {
+        "From": {
+          "type": "string"
+        },
+        "To": {
+          "type": "string"
+        },
+        "Body": {
+          "type": "string"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",
@@ -113,6 +180,47 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1ChargePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/ChargePaymentRequestChargeData"
+        }
+      }
+    },
+    "v1RefundPaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/RefundPaymentRequestRefundData"
+        }
+      }
+    },
+    "v1Response": {
+      "type": "object",
+      "properties": {
+        "Msg": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SendEmailRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/SendEmailRequestSendEmailData"
         }
       }
     }

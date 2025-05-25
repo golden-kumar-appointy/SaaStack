@@ -2,39 +2,27 @@ package payment
 
 import (
 	"fmt"
-	"saastack/core/types"
-	paymenttypes "saastack/interfaces/payment/types"
+	corev1 "saastack/gen/core/v1"
 )
 
 type Razorpay struct{}
 
-func (provider *Razorpay) MakePayment(request paymenttypes.PaymentInterfaceData) types.ResponseData {
-	fmt.Println("Razorpay.MakePayment request:", request)
+func (provider *Razorpay) Charge(req *corev1.ChargePaymentRequest_ChargeData) (*corev1.Response, error) {
+	fmt.Println("Razorpay.Charge request:", req)
 
-	response := types.ResponseData{
+	response := corev1.Response{
 		Msg: "Razorpay: payment Made",
 	}
-	return response
+	return &response, nil
 }
 
-func (p *Razorpay) Run(request types.InterfaceRequestData) types.ResponseData {
-	var data paymenttypes.PaymentInterfaceData
-	data.Parse(request.Data)
+func (provider *Razorpay) Refund(req *corev1.RefundPaymentRequest_RefundData) (*corev1.Response, error) {
+	fmt.Println("Razorpay.Refund request:", req)
 
-	fmt.Println("PluginId :", request.PluginId)
-	fmt.Println("Route :", request.Route)
-
-	var response types.ResponseData
-
-	switch request.Route {
-	case paymenttypes.MakePaymentRoute:
-		response = p.MakePayment(data)
-
-	default:
-		response.Msg = "Route not present"
+	response := corev1.Response{
+		Msg: "Razorpay: Refund Made",
 	}
-
-	return response
+	return &response, nil
 }
 
 func NewRazorPayClient() *Razorpay {
