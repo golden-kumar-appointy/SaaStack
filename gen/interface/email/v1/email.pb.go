@@ -7,12 +7,12 @@
 package v1
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -101,9 +101,10 @@ const file_interface_email_v1_email_proto_rawDesc = "" +
 	"\x1einterface/email/v1/email.proto\x12\x05email\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2T\n" +
-	"\fEmailService\x12D\n" +
-	"\tSendEmail\x12\x0e.email.Request\x1a\x0f.email.Response\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/email/sendBl\n" +
+	"\bResponse2N\n" +
+	"\fEmailService\x12>\n" +
+	"\tSendEmail\x12\x0e.email.Request\x1a\x0f.email.Response\"\x10\x82\xd3\xe4\x93\x02\n" +
+	":\x01*\"\x05/sendBl\n" +
 	"\tcom.emailB\n" +
 	"EmailProtoP\x01Z\x1fsaastack/gen/interface/email/v1\xa2\x02\x03EXX\xaa\x02\x05Email\xca\x02\x05Email\xe2\x02\x11Email\\GPBMetadata\xea\x02\x05Emailb\x06proto3"
 
@@ -119,11 +120,13 @@ func file_interface_email_v1_email_proto_rawDescGZIP() []byte {
 	return file_interface_email_v1_email_proto_rawDescData
 }
 
-var file_interface_email_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_interface_email_v1_email_proto_goTypes = []any{
-	(*Request)(nil),  // 0: email.Request
-	(*Response)(nil), // 1: email.Response
-}
+var (
+	file_interface_email_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_interface_email_v1_email_proto_goTypes  = []any{
+		(*Request)(nil),  // 0: email.Request
+		(*Response)(nil), // 1: email.Response
+	}
+)
 var file_interface_email_v1_email_proto_depIdxs = []int32{
 	0, // 0: email.EmailService.SendEmail:input_type -> email.Request
 	1, // 1: email.EmailService.SendEmail:output_type -> email.Response

@@ -8,6 +8,7 @@ package corev1
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -78,6 +79,7 @@ type UnimplementedCoreServiceServer struct{}
 func (UnimplementedCoreServiceServer) EmailHandler(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EmailHandler not implemented")
 }
+
 func (UnimplementedCoreServiceServer) PaymentHandler(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PaymentHandler not implemented")
 }

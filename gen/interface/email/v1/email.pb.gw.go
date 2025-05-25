@@ -71,7 +71,7 @@ func RegisterEmailServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/email.EmailService/SendEmail", runtime.WithHTTPPathPattern("/email/send"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/email.EmailService/SendEmail", runtime.WithHTTPPathPattern("/send"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -129,7 +129,7 @@ func RegisterEmailServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/email.EmailService/SendEmail", runtime.WithHTTPPathPattern("/email/send"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/email.EmailService/SendEmail", runtime.WithHTTPPathPattern("/send"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -146,7 +146,7 @@ func RegisterEmailServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_EmailService_SendEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"email", "send"}, ""))
+	pattern_EmailService_SendEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"send"}, ""))
 )
 
 var (

@@ -12,14 +12,14 @@ message Response {}
 service PaymentService {
   rpc Charge(Request) returns (Response){
     option (google.api.http) = {
-      post: "/payment/charge"
+      post: "/charge"
       body: "*"
     };
   };
 
   rpc Refund(Request) returns (Response){
     option (google.api.http) = {
-      post: "/payment/refund"
+      post: "/refund"
       body: "*"
     };
   };

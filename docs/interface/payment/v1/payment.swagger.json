@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/payment/charge": {
+    "/charge": {
       "post": {
         "operationId": "PaymentService_Charge",
         "responses": {
@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/payment/refund": {
+    "/refund": {
       "post": {
         "operationId": "PaymentService_Refund",
         "responses": {

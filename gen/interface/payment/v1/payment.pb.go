@@ -7,12 +7,12 @@
 package v1
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -101,10 +101,10 @@ const file_interface_payment_v1_payment_proto_rawDesc = "" +
 	"\"interface/payment/v1/payment.proto\x12\apayment\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2\xa6\x01\n" +
-	"\x0ePaymentService\x12I\n" +
-	"\x06Charge\x12\x10.payment.Request\x1a\x11.payment.Response\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/payment/charge\x12I\n" +
-	"\x06Refund\x12\x10.payment.Request\x1a\x11.payment.Response\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/payment/refundBz\n" +
+	"\bResponse2\x96\x01\n" +
+	"\x0ePaymentService\x12A\n" +
+	"\x06Charge\x12\x10.payment.Request\x1a\x11.payment.Response\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/charge\x12A\n" +
+	"\x06Refund\x12\x10.payment.Request\x1a\x11.payment.Response\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/refundBz\n" +
 	"\vcom.paymentB\fPaymentProtoP\x01Z!saastack/gen/interface/payment/v1\xa2\x02\x03PXX\xaa\x02\aPayment\xca\x02\aPayment\xe2\x02\x13Payment\\GPBMetadata\xea\x02\aPaymentb\x06proto3"
 
 var (
@@ -119,11 +119,13 @@ func file_interface_payment_v1_payment_proto_rawDescGZIP() []byte {
 	return file_interface_payment_v1_payment_proto_rawDescData
 }
 
-var file_interface_payment_v1_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_interface_payment_v1_payment_proto_goTypes = []any{
-	(*Request)(nil),  // 0: payment.Request
-	(*Response)(nil), // 1: payment.Response
-}
+var (
+	file_interface_payment_v1_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_interface_payment_v1_payment_proto_goTypes  = []any{
+		(*Request)(nil),  // 0: payment.Request
+		(*Response)(nil), // 1: payment.Response
+	}
+)
 var file_interface_payment_v1_payment_proto_depIdxs = []int32{
 	0, // 0: payment.PaymentService.Charge:input_type -> payment.Request
 	0, // 1: payment.PaymentService.Refund:input_type -> payment.Request

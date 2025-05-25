@@ -95,7 +95,7 @@ func RegisterPaymentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/payment.PaymentService/Charge", runtime.WithHTTPPathPattern("/payment/charge"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/payment.PaymentService/Charge", runtime.WithHTTPPathPattern("/charge"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -115,7 +115,7 @@ func RegisterPaymentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/payment.PaymentService/Refund", runtime.WithHTTPPathPattern("/payment/refund"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/payment.PaymentService/Refund", runtime.WithHTTPPathPattern("/refund"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -173,7 +173,7 @@ func RegisterPaymentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/payment.PaymentService/Charge", runtime.WithHTTPPathPattern("/payment/charge"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/payment.PaymentService/Charge", runtime.WithHTTPPathPattern("/charge"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -190,7 +190,7 @@ func RegisterPaymentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/payment.PaymentService/Refund", runtime.WithHTTPPathPattern("/payment/refund"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/payment.PaymentService/Refund", runtime.WithHTTPPathPattern("/refund"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -207,8 +207,8 @@ func RegisterPaymentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_PaymentService_Charge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"payment", "charge"}, ""))
-	pattern_PaymentService_Refund_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"payment", "refund"}, ""))
+	pattern_PaymentService_Charge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"charge"}, ""))
+	pattern_PaymentService_Refund_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"refund"}, ""))
 )
 
 var (

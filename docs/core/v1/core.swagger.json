@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/core/email": {
+    "/core/email/*": {
       "post": {
         "operationId": "CoreService_EmailHandler",
         "responses": {
@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/core/payment": {
+    "/core/payment/*": {
       "post": {
         "operationId": "CoreService_PaymentHandler",
         "responses": {

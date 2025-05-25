@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/email/send": {
+    "/send": {
       "post": {
         "operationId": "EmailService_SendEmail",
         "responses": {

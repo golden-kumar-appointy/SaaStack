@@ -12,7 +12,7 @@ message Response {}
 service EmailService { 
   rpc SendEmail(Request) returns (Response){
     option (google.api.http) = {
-      post: "/email/send"
+      post: "/send"
       body: "*"
     };
   };

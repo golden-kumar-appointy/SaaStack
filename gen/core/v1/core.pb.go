@@ -7,12 +7,12 @@
 package corev1
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	_ "saastack/gen/google/api"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -101,10 +101,10 @@ const file_core_v1_core_proto_rawDesc = "" +
 	"\x12core/v1/core.proto\x12\acore.v1\x1a\x1cgoogle/api/annotations.proto\"\t\n" +
 	"\aRequest\"\n" +
 	"\n" +
-	"\bResponse2\xab\x01\n" +
-	"\vCoreService\x12K\n" +
-	"\fEmailHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/core/email\x12O\n" +
-	"\x0ePaymentHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/core/paymentBr\n" +
+	"\bResponse2\xaf\x01\n" +
+	"\vCoreService\x12M\n" +
+	"\fEmailHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/core/email/*\x12Q\n" +
+	"\x0ePaymentHandler\x12\x10.core.v1.Request\x1a\x11.core.v1.Response\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/core/payment/*Br\n" +
 	"\vcom.core.v1B\tCoreProtoP\x01Z\x1bsaastack/gen/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -119,11 +119,13 @@ func file_core_v1_core_proto_rawDescGZIP() []byte {
 	return file_core_v1_core_proto_rawDescData
 }
 
-var file_core_v1_core_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_core_v1_core_proto_goTypes = []any{
-	(*Request)(nil),  // 0: core.v1.Request
-	(*Response)(nil), // 1: core.v1.Response
-}
+var (
+	file_core_v1_core_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_core_v1_core_proto_goTypes  = []any{
+		(*Request)(nil),  // 0: core.v1.Request
+		(*Response)(nil), // 1: core.v1.Response
+	}
+)
 var file_core_v1_core_proto_depIdxs = []int32{
 	0, // 0: core.v1.CoreService.EmailHandler:input_type -> core.v1.Request
 	0, // 1: core.v1.CoreService.PaymentHandler:input_type -> core.v1.Request
