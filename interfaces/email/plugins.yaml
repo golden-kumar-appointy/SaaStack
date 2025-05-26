@@ -1,0 +1,11 @@
+plugins:
+  - name: awsses
+    interface: email
+    deployment: monolithic # microservice
+  - name: mailgun
+    interface: email
+    deployment: monolithic
+  - name: custom
+    interface: email
+    deployment: microservice
+    source: "grpc://localhost:9002"

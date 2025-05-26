@@ -1,0 +1,7 @@
+plugins:
+  - name: razorpay
+    interface: payment
+    deployment: monolithic # microservice
+  - name: stripe
+    interface: email
+    deployment: monolithic

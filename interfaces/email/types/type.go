@@ -5,11 +5,11 @@ import (
 	"saastack/interfaces"
 )
 
-const (
-	AWSSES  interfaces.PluginID = "awsses"
-	MAILGUN interfaces.PluginID = "mailgun"
-)
-
 type EmailPlugin interface {
 	SendEmail(req *corev1.SendEmailRequest_SendEmailData) (*corev1.Response, error)
+}
+
+type PluginMapData struct {
+	Plugin interfaces.PluginData
+	Client EmailPlugin
 }

@@ -445,6 +445,7 @@ var (
 		(*RefundPaymentRequest_RefundData)(nil), // 6: core.v1.RefundPaymentRequest.RefundData
 	}
 )
+
 var file_core_v1_core_proto_depIdxs = []int32{
 	4, // 0: core.v1.SendEmailRequest.data:type_name -> core.v1.SendEmailRequest.SendEmailData
 	5, // 1: core.v1.ChargePaymentRequest.data:type_name -> core.v1.ChargePaymentRequest.ChargeData

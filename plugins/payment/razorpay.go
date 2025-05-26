@@ -3,7 +3,10 @@ package payment
 import (
 	"fmt"
 	corev1 "saastack/gen/core/v1"
+	"saastack/interfaces"
 )
+
+const RAZORPAY_ID interfaces.PluginID = "razorpay"
 
 type Razorpay struct{}
 

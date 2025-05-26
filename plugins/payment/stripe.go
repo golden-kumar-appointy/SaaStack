@@ -3,9 +3,12 @@ package payment
 import (
 	"fmt"
 	corev1 "saastack/gen/core/v1"
+	"saastack/interfaces"
 )
 
 type Stripe struct{}
+
+const STRIPE_ID interfaces.PluginID = "stripe"
 
 func (provider *Stripe) Charge(req *corev1.ChargePaymentRequest_ChargeData) (*corev1.Response, error) {
 	fmt.Println("Stripe.Charge request:", req)
