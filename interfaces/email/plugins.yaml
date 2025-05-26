@@ -8,4 +8,4 @@ plugins:
   - name: custom
     interface: email
     deployment: microservice
-    source: "grpc://localhost:9002"
+    source: "localhost:9002"

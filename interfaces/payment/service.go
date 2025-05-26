@@ -8,7 +8,9 @@ import (
 	"saastack/interfaces/payment/types"
 	"saastack/plugins/payment"
 
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -22,6 +24,9 @@ func init() {
 	for _, plugin := range config.Plugins {
 		if plugin.Deployment == string(interfaces.MICROSERVICE) {
 			log.Println("Plugin deploy via microservice", plugin)
+			pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
+				Plugin: plugin,
+			}
 		} else {
 			log.Println("Plugin deploy via monolithic", plugin)
 			// Razor Pay Client
@@ -31,13 +36,13 @@ func init() {
 
 			switch plugin.Name {
 			case string(payment.RAZORPAY_ID):
-				pluginMap[payment.RAZORPAY_ID] = types.PluginMapData{
+				pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
 					Plugin: plugin,
 					Client: razorpayClient,
 				}
 
 			case string(payment.STRIPE_ID):
-				pluginMap[payment.STRIPE_ID] = types.PluginMapData{
+				pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
 					Plugin: plugin,
 					Client: stripeClient,
 				}
@@ -60,10 +65,34 @@ func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePayme
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	client := plugin.Client
-	response, err := client.Charge(req.Data)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Internal Server Error")
+	var response *corev1.Response
+
+	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
+		client := plugin.Client
+		result, err := client.Charge(req.Data)
+		response = result
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Internal Server Error")
+		}
+	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
+		log.Println("microservice called")
+		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			panic(err)
+		}
+		defer conn.Close()
+
+		client := corev1.NewPaymentServiceClient(conn)
+		data := corev1.ChargePaymentRequest{
+			PluginId: plugin.Plugin.Name,
+			Data:     req.Data,
+		}
+		result, err := client.Charge(context.Background(), &data)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		response = result
 	}
 
 	return response, nil
@@ -77,10 +106,34 @@ func (payment *PaymentService) Refund(_ context.Context, req *corev1.RefundPayme
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	client := plugin.Client
-	response, err := client.Refund(req.Data)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Internal Server Error")
+	var response *corev1.Response
+
+	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
+		client := plugin.Client
+		result, err := client.Refund(req.Data)
+		response = result
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Internal Server Error")
+		}
+	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
+		log.Println("microservice called")
+		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			panic(err)
+		}
+		defer conn.Close()
+
+		client := corev1.NewPaymentServiceClient(conn)
+		data := corev1.RefundPaymentRequest{
+			PluginId: plugin.Plugin.Name,
+			Data:     req.Data,
+		}
+		result, err := client.Refund(context.Background(), &data)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		response = result
 	}
 
 	return response, nil
