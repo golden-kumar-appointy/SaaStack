@@ -42,7 +42,7 @@ func main() {
 
 	emailv1.RegisterEmailServiceServer(grpcServer, &CustomEmail{})
 
-	log.Printf("core server listening at %v", lis.Addr())
+	log.Printf("custom email plugin server listening at %v", lis.Addr())
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
