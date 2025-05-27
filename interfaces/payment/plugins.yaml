@@ -5,3 +5,7 @@ plugins:
   - name: stripe
     interface: email
     deployment: monolithic
+  - name: custom
+    interface: payment
+    deployment: microservice
+    source: "localhost:9003"

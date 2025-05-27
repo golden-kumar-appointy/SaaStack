@@ -1,6 +1,7 @@
 package payment
 
 import (
+	"context"
 	"fmt"
 	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
@@ -10,7 +11,7 @@ type Stripe struct{}
 
 const STRIPE_ID interfaces.PluginID = "stripe"
 
-func (provider *Stripe) Charge(req *paymentv1.ChargePaymentRequest_ChargeData) (*paymentv1.Response, error) {
+func (provider *Stripe) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Charge request:", req)
 
 	response := paymentv1.Response{
@@ -19,7 +20,7 @@ func (provider *Stripe) Charge(req *paymentv1.ChargePaymentRequest_ChargeData) (
 	return &response, nil
 }
 
-func (provider *Stripe) Refund(req *paymentv1.RefundPaymentRequest_RefundData) (*paymentv1.Response, error) {
+func (provider *Stripe) Refund(_ context.Context, req *paymentv1.RefundPaymentRequest) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Refund request:", req)
 
 	response := paymentv1.Response{

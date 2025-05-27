@@ -66,16 +66,22 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 	}
 
 	var response *paymentv1.Response
+	reqData := paymentv1.ChargePaymentRequest{
+		PluginId: plugin.Plugin.Name,
+		Data:     req.Data,
+	}
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
-		result, err := client.Charge(req.Data)
+		result, err := client.Charge(context.Background(), &reqData)
 		response = result
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Internal Server Error")
 		}
+
 	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
 		log.Println("microservice called")
+
 		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)
@@ -83,18 +89,13 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 		defer conn.Close()
 
 		client := paymentv1.NewPaymentServiceClient(conn)
-		data := paymentv1.ChargePaymentRequest{
-			PluginId: plugin.Plugin.Name,
-			Data:     req.Data,
-		}
-		result, err := client.Charge(context.Background(), &data)
+		result, err := client.Charge(context.Background(), &reqData)
 		if err != nil {
 			log.Println(err)
 			return nil, err
 		}
 		response = result
 	}
-
 	return response, nil
 }
 
@@ -107,10 +108,14 @@ func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPa
 	}
 
 	var response *paymentv1.Response
+	reqData := paymentv1.RefundPaymentRequest{
+		PluginId: plugin.Plugin.Name,
+		Data:     req.Data,
+	}
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
-		result, err := client.Refund(req.Data)
+		result, err := client.Refund(context.Background(), &reqData)
 		response = result
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Internal Server Error")
@@ -124,11 +129,8 @@ func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPa
 		defer conn.Close()
 
 		client := paymentv1.NewPaymentServiceClient(conn)
-		data := paymentv1.RefundPaymentRequest{
-			PluginId: plugin.Plugin.Name,
-			Data:     req.Data,
-		}
-		result, err := client.Refund(context.Background(), &data)
+
+		result, err := client.Refund(context.Background(), &reqData)
 		if err != nil {
 			log.Println(err)
 			return nil, err

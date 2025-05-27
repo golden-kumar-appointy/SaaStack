@@ -1,6 +1,7 @@
 package email
 
 import (
+	"context"
 	"fmt"
 	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
@@ -10,7 +11,7 @@ type AmazonSES struct{}
 
 const AWSSES_ID interfaces.PluginID = "awsses"
 
-func (provider *AmazonSES) SendEmail(req *emailv1.SendEmailRequest_SendEmailData) (*emailv1.Response, error) {
+func (provider *AmazonSES) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("AmazonSES.sendEmail request:", req)
 
 	response := emailv1.Response{

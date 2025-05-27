@@ -69,10 +69,14 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 	}
 
 	var response *emailv1.Response
+	reqData := emailv1.SendEmailRequest{
+		PluginId: plugin.Plugin.Name,
+		Data:     req.Data,
+	}
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
-		result, err := client.SendEmail(req.Data)
+		result, err := client.SendEmail(context.Background(), &reqData)
 		response = result
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Internal Server Error")
@@ -86,11 +90,7 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 		defer conn.Close()
 
 		client := emailv1.NewEmailServiceClient(conn)
-		data := emailv1.SendEmailRequest{
-			PluginId: plugin.Plugin.Name,
-			Data:     req.Data,
-		}
-		result, err := client.SendEmail(context.Background(), &data)
+		result, err := client.SendEmail(context.Background(), &reqData)
 		if err != nil {
 			log.Println(err)
 			return nil, err
