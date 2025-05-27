@@ -1,12 +1,12 @@
 package types
 
 import (
-	corev1 "saastack/gen/core/v1"
+	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
 )
 
 type EmailPlugin interface {
-	SendEmail(req *corev1.SendEmailRequest_SendEmailData) (*corev1.Response, error)
+	SendEmail(req *emailv1.SendEmailRequest_SendEmailData) (*emailv1.Response, error)
 }
 
 type PluginMapData struct {

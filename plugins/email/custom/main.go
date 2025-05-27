@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net"
-	corev1 "saastack/gen/core/v1"
+	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
 
 	"google.golang.org/grpc"
 )
 
 type CustomEmail struct {
-	corev1.UnimplementedEmailServiceServer
+	emailv1.UnimplementedEmailServiceServer
 }
 
 const (
@@ -20,10 +20,10 @@ const (
 	PLUGIN_ADDRESS string              = "localhost:9002"
 )
 
-func (provider *CustomEmail) SendEmail(_ context.Context, req *corev1.SendEmailRequest) (*corev1.Response, error) {
+func (provider *CustomEmail) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("Custom.sendEmail request:", req)
 
-	response := corev1.Response{
+	response := emailv1.Response{
 		Msg: "Custom: sent Email",
 	}
 	return &response, nil
@@ -40,8 +40,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 
-	// Register service handler
-	corev1.RegisterEmailServiceServer(grpcServer, &CustomEmail{})
+	emailv1.RegisterEmailServiceServer(grpcServer, &CustomEmail{})
 
 	log.Printf("core server listening at %v", lis.Addr())
 

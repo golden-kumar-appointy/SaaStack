@@ -1,13 +1,13 @@
 package types
 
 import (
-	corev1 "saastack/gen/core/v1"
+	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 )
 
 type PaymentPlugin interface {
-	Charge(req *corev1.ChargePaymentRequest_ChargeData) (*corev1.Response, error)
-	Refund(req *corev1.RefundPaymentRequest_RefundData) (*corev1.Response, error)
+	Charge(req *paymentv1.ChargePaymentRequest_ChargeData) (*paymentv1.Response, error)
+	Refund(req *paymentv1.RefundPaymentRequest_RefundData) (*paymentv1.Response, error)
 }
 
 type PluginMapData struct {

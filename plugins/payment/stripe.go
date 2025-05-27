@@ -2,7 +2,7 @@ package payment
 
 import (
 	"fmt"
-	corev1 "saastack/gen/core/v1"
+	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 )
 
@@ -10,19 +10,19 @@ type Stripe struct{}
 
 const STRIPE_ID interfaces.PluginID = "stripe"
 
-func (provider *Stripe) Charge(req *corev1.ChargePaymentRequest_ChargeData) (*corev1.Response, error) {
+func (provider *Stripe) Charge(req *paymentv1.ChargePaymentRequest_ChargeData) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Charge request:", req)
 
-	response := corev1.Response{
+	response := paymentv1.Response{
 		Msg: "Stripe: payment Made",
 	}
 	return &response, nil
 }
 
-func (provider *Stripe) Refund(req *corev1.RefundPaymentRequest_RefundData) (*corev1.Response, error) {
+func (provider *Stripe) Refund(req *paymentv1.RefundPaymentRequest_RefundData) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Refund request:", req)
 
-	response := corev1.Response{
+	response := paymentv1.Response{
 		Msg: "Stripe: Refund Made",
 	}
 	return &response, nil

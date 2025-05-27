@@ -2,7 +2,7 @@ package payment
 
 import (
 	"fmt"
-	corev1 "saastack/gen/core/v1"
+	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 )
 
@@ -10,19 +10,19 @@ const RAZORPAY_ID interfaces.PluginID = "razorpay"
 
 type Razorpay struct{}
 
-func (provider *Razorpay) Charge(req *corev1.ChargePaymentRequest_ChargeData) (*corev1.Response, error) {
+func (provider *Razorpay) Charge(req *paymentv1.ChargePaymentRequest_ChargeData) (*paymentv1.Response, error) {
 	fmt.Println("Razorpay.Charge request:", req)
 
-	response := corev1.Response{
+	response := paymentv1.Response{
 		Msg: "Razorpay: payment Made",
 	}
 	return &response, nil
 }
 
-func (provider *Razorpay) Refund(req *corev1.RefundPaymentRequest_RefundData) (*corev1.Response, error) {
+func (provider *Razorpay) Refund(req *paymentv1.RefundPaymentRequest_RefundData) (*paymentv1.Response, error) {
 	fmt.Println("Razorpay.Refund request:", req)
 
-	response := corev1.Response{
+	response := paymentv1.Response{
 		Msg: "Razorpay: Refund Made",
 	}
 	return &response, nil

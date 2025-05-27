@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package email.v1;
+
+option go_package = "email/v1;emailpb";
+
+import "google/api/annotations.proto";
+
+message Response {
+  string Msg = 1;
+}
+
+message SendEmailRequest {
+  string pluginId = 1;
+  
+  message SendEmailData {
+    string From = 1;
+    string To = 2;
+    string Body = 3;
+  }
+  SendEmailData data = 2;
+}
+
+// Email Interface service
+service EmailService { 
+  rpc SendEmail(SendEmailRequest) returns (Response){
+    option (google.api.http) = {
+      post: "/v1/email/send"
+      body: "*"
+    };
+  };
+}
+
+

@@ -1,13 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "core/v1/core.proto",
+    "title": "payment/v1/payment.proto",
     "version": "version not set"
   },
   "tags": [
-    {
-      "name": "EmailService"
-    },
     {
       "name": "PaymentService"
     }
@@ -19,38 +16,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/email/send": {
-      "post": {
-        "operationId": "EmailService_SendEmail",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1Response"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1SendEmailRequest"
-            }
-          }
-        ],
-        "tags": [
-          "EmailService"
-        ]
-      }
-    },
     "/v1/payment/charge": {
       "post": {
         "operationId": "PaymentService_Charge",
@@ -58,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Response"
+              "$ref": "#/definitions/paymentv1Response"
             }
           },
           "default": {
@@ -74,7 +39,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ChargePaymentRequest"
+              "$ref": "#/definitions/paymentv1ChargePaymentRequest"
             }
           }
         ],
@@ -90,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Response"
+              "$ref": "#/definitions/paymentv1Response"
             }
           },
           "default": {
@@ -106,7 +71,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RefundPaymentRequest"
+              "$ref": "#/definitions/paymentv1RefundPaymentRequest"
             }
           }
         ],
@@ -117,7 +82,18 @@
     }
   },
   "definitions": {
-    "ChargePaymentRequestChargeData": {
+    "paymentv1ChargePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/paymentv1ChargePaymentRequestChargeData"
+        }
+      }
+    },
+    "paymentv1ChargePaymentRequestChargeData": {
       "type": "object",
       "properties": {
         "Amount": {
@@ -129,7 +105,18 @@
         }
       }
     },
-    "RefundPaymentRequestRefundData": {
+    "paymentv1RefundPaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/paymentv1RefundPaymentRequestRefundData"
+        }
+      }
+    },
+    "paymentv1RefundPaymentRequestRefundData": {
       "type": "object",
       "properties": {
         "paymentId": {
@@ -141,16 +128,10 @@
         }
       }
     },
-    "SendEmailRequestSendEmailData": {
+    "paymentv1Response": {
       "type": "object",
       "properties": {
-        "From": {
-          "type": "string"
-        },
-        "To": {
-          "type": "string"
-        },
-        "Body": {
+        "Msg": {
           "type": "string"
         }
       }
@@ -180,47 +161,6 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1ChargePaymentRequest": {
-      "type": "object",
-      "properties": {
-        "pluginId": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/ChargePaymentRequestChargeData"
-        }
-      }
-    },
-    "v1RefundPaymentRequest": {
-      "type": "object",
-      "properties": {
-        "pluginId": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/RefundPaymentRequestRefundData"
-        }
-      }
-    },
-    "v1Response": {
-      "type": "object",
-      "properties": {
-        "Msg": {
-          "type": "string"
-        }
-      }
-    },
-    "v1SendEmailRequest": {
-      "type": "object",
-      "properties": {
-        "pluginId": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/SendEmailRequestSendEmailData"
         }
       }
     }

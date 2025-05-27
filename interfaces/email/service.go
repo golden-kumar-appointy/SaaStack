@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	corev1 "saastack/gen/core/v1"
+	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
 	"saastack/interfaces/email/types"
 	"saastack/plugins/email"
@@ -57,10 +57,10 @@ func init() {
 }
 
 type EmailService struct {
-	corev1.UnimplementedEmailServiceServer
+	emailv1.UnimplementedEmailServiceServer
 }
 
-func (email *EmailService) SendEmail(_ context.Context, req *corev1.SendEmailRequest) (*corev1.Response, error) {
+func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("Email Service Req: ", req)
 
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
@@ -68,7 +68,7 @@ func (email *EmailService) SendEmail(_ context.Context, req *corev1.SendEmailReq
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	var response *corev1.Response
+	var response *emailv1.Response
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
@@ -85,8 +85,8 @@ func (email *EmailService) SendEmail(_ context.Context, req *corev1.SendEmailReq
 		}
 		defer conn.Close()
 
-		client := corev1.NewEmailServiceClient(conn)
-		data := corev1.SendEmailRequest{
+		client := emailv1.NewEmailServiceClient(conn)
+		data := emailv1.SendEmailRequest{
 			PluginId: plugin.Plugin.Name,
 			Data:     req.Data,
 		}

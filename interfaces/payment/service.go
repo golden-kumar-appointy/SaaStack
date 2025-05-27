@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"log"
-	corev1 "saastack/gen/core/v1"
+	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 	"saastack/interfaces/payment/types"
 	"saastack/plugins/payment"
@@ -54,10 +54,10 @@ func init() {
 }
 
 type PaymentService struct {
-	corev1.UnimplementedPaymentServiceServer
+	paymentv1.UnimplementedPaymentServiceServer
 }
 
-func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePaymentRequest) (*corev1.Response, error) {
+func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Payment Charge req :", req)
 
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
@@ -65,7 +65,7 @@ func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePayme
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	var response *corev1.Response
+	var response *paymentv1.Response
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
@@ -82,8 +82,8 @@ func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePayme
 		}
 		defer conn.Close()
 
-		client := corev1.NewPaymentServiceClient(conn)
-		data := corev1.ChargePaymentRequest{
+		client := paymentv1.NewPaymentServiceClient(conn)
+		data := paymentv1.ChargePaymentRequest{
 			PluginId: plugin.Plugin.Name,
 			Data:     req.Data,
 		}
@@ -98,7 +98,7 @@ func (payment *PaymentService) Charge(_ context.Context, req *corev1.ChargePayme
 	return response, nil
 }
 
-func (payment *PaymentService) Refund(_ context.Context, req *corev1.RefundPaymentRequest) (*corev1.Response, error) {
+func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Payment Refund req :", req)
 
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
@@ -106,7 +106,7 @@ func (payment *PaymentService) Refund(_ context.Context, req *corev1.RefundPayme
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	var response *corev1.Response
+	var response *paymentv1.Response
 
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
@@ -123,8 +123,8 @@ func (payment *PaymentService) Refund(_ context.Context, req *corev1.RefundPayme
 		}
 		defer conn.Close()
 
-		client := corev1.NewPaymentServiceClient(conn)
-		data := corev1.RefundPaymentRequest{
+		client := paymentv1.NewPaymentServiceClient(conn)
+		data := paymentv1.RefundPaymentRequest{
 			PluginId: plugin.Plugin.Name,
 			Data:     req.Data,
 		}

@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 	"net"
-	corev1 "saastack/gen/core/v1"
+	emailv1 "saastack/gen/email/v1"
+	paymentv1 "saastack/gen/payment/v1"
 	emailService "saastack/interfaces/email"
 	paymentService "saastack/interfaces/payment"
 
@@ -20,8 +21,8 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// Register service handler
-	corev1.RegisterEmailServiceServer(grpcServer, &emailService.EmailService{})
-	corev1.RegisterPaymentServiceServer(grpcServer, &paymentService.PaymentService{})
+	emailv1.RegisterEmailServiceServer(grpcServer, &emailService.EmailService{})
+	paymentv1.RegisterPaymentServiceServer(grpcServer, &paymentService.PaymentService{})
 
 	log.Printf("core server listening at %v", lis.Addr())
 

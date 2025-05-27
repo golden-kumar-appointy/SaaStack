@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: core/v1/core.proto
+// source: payment/v1/payment.proto
 
-package corev1
+package paymentv1
 
 import (
 	context "context"
@@ -19,114 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EmailService_SendEmail_FullMethodName = "/core.v1.EmailService/SendEmail"
-)
-
-// EmailServiceClient is the client API for EmailService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// Email Interface service
-type EmailServiceClient interface {
-	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*Response, error)
-}
-
-type emailServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewEmailServiceClient(cc grpc.ClientConnInterface) EmailServiceClient {
-	return &emailServiceClient{cc}
-}
-
-func (c *emailServiceClient) SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*Response, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
-	err := c.cc.Invoke(ctx, EmailService_SendEmail_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// EmailServiceServer is the server API for EmailService service.
-// All implementations must embed UnimplementedEmailServiceServer
-// for forward compatibility.
-//
-// Email Interface service
-type EmailServiceServer interface {
-	SendEmail(context.Context, *SendEmailRequest) (*Response, error)
-	mustEmbedUnimplementedEmailServiceServer()
-}
-
-// UnimplementedEmailServiceServer must be embedded to have
-// forward compatible implementations.
-//
-// NOTE: this should be embedded by value instead of pointer to avoid a nil
-// pointer dereference when methods are called.
-type UnimplementedEmailServiceServer struct{}
-
-func (UnimplementedEmailServiceServer) SendEmail(context.Context, *SendEmailRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendEmail not implemented")
-}
-func (UnimplementedEmailServiceServer) mustEmbedUnimplementedEmailServiceServer() {}
-func (UnimplementedEmailServiceServer) testEmbeddedByValue()                      {}
-
-// UnsafeEmailServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to EmailServiceServer will
-// result in compilation errors.
-type UnsafeEmailServiceServer interface {
-	mustEmbedUnimplementedEmailServiceServer()
-}
-
-func RegisterEmailServiceServer(s grpc.ServiceRegistrar, srv EmailServiceServer) {
-	// If the following call pancis, it indicates UnimplementedEmailServiceServer was
-	// embedded by pointer and is nil.  This will cause panics if an
-	// unimplemented method is ever invoked, so we test this at initialization
-	// time to prevent it from happening at runtime later due to I/O.
-	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
-		t.testEmbeddedByValue()
-	}
-	s.RegisterService(&EmailService_ServiceDesc, srv)
-}
-
-func _EmailService_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendEmailRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EmailServiceServer).SendEmail(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: EmailService_SendEmail_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmailServiceServer).SendEmail(ctx, req.(*SendEmailRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// EmailService_ServiceDesc is the grpc.ServiceDesc for EmailService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var EmailService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "core.v1.EmailService",
-	HandlerType: (*EmailServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "SendEmail",
-			Handler:    _EmailService_SendEmail_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "core/v1/core.proto",
-}
-
-const (
-	PaymentService_Charge_FullMethodName = "/core.v1.PaymentService/Charge"
-	PaymentService_Refund_FullMethodName = "/core.v1.PaymentService/Refund"
+	PaymentService_Charge_FullMethodName = "/payment.v1.PaymentService/Charge"
+	PaymentService_Refund_FullMethodName = "/payment.v1.PaymentService/Refund"
 )
 
 // PaymentServiceClient is the client API for PaymentService service.
@@ -252,7 +146,7 @@ func _PaymentService_Refund_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PaymentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "core.v1.PaymentService",
+	ServiceName: "payment.v1.PaymentService",
 	HandlerType: (*PaymentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -265,5 +159,5 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "core/v1/core.proto",
+	Metadata: "payment/v1/payment.proto",
 }
