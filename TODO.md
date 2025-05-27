@@ -22,3 +22,23 @@ plugins:
   - name:
 ```
 
+Step 2:
+
+### Todo
+
+Lifecycle:
+
+Lifecycle in uber fx
+
+add database in plugin (for loging)
+
+How to logging, which layer used logging.
+
+Implement onion architechture, add logger,
+chaning of one inside another
+
+Database: for learning query
+
+fx -> use life cycle to append user data.
+
+after sending destroy the life cycle objects

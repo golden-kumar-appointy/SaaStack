@@ -3,7 +3,7 @@ plugins:
     interface: payment
     deployment: monolithic # microservice
   - name: stripe
-    interface: email
+    interface: payment
     deployment: monolithic
   - name: custom
     interface: payment
