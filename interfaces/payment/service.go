@@ -27,6 +27,10 @@ type PaymentService struct {
 	paymentv1.UnimplementedPaymentServiceServer
 }
 
+func NewPaymentService() *PaymentService {
+	return &PaymentService{}
+}
+
 func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Payment Charge req :", req)
 

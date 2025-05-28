@@ -28,6 +28,10 @@ type EmailService struct {
 	emailv1.UnimplementedEmailServiceServer
 }
 
+func NewEmailService() *EmailService {
+	return &EmailService{}
+}
+
 func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("Email Service Req: ", req)
 

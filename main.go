@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"path"
@@ -8,6 +9,7 @@ import (
 	"saastack/core"
 	emailv1 "saastack/gen/email/v1"
 	paymentv1 "saastack/gen/payment/v1"
+	httpgateway "saastack/http-gateway"
 	"saastack/interfaces"
 	emailService "saastack/interfaces/email"
 	emailType "saastack/interfaces/email/types"
@@ -16,13 +18,15 @@ import (
 	"saastack/plugins/email"
 	"saastack/plugins/payment"
 
-	"gopkg.in/yaml.v2"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"gopkg.in/yaml.v3"
 )
 
 var Services map[string]bool = make(map[string]bool)
 
-func init() {
-	src := "interface.yaml"
+func ReadConfigFile() {
+	src := "config.yaml"
 	currDir, _ := filepath.Abs(".")
 	src = path.Join(currDir, src)
 
@@ -48,47 +52,47 @@ func init() {
 			log.Println("Interface not implemented", config.Interface)
 		}
 	}
-
 	log.Println(res)
 }
 
 func main() {
+	ReadConfigFile()
+
+	// gRPC Server
 	srv := core.NewGrpcServer()
+	emailHandler := emailService.NewEmailService()
+	paymentHandler := paymentService.NewPaymentService()
+
+	// HTTP Gateway
+	mux := httpgateway.NewMuxServer()
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Register Service to core
 	for key := range Services {
 		switch key {
 		case "email":
-			emailv1.RegisterEmailServiceServer(srv, &emailService.EmailService{})
+			emailv1.RegisterEmailServiceServer(srv, emailHandler)
+			if err := emailv1.RegisterEmailServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+				panic(err)
+			}
 		case "payment":
-			paymentv1.RegisterPaymentServiceServer(srv, &paymentService.PaymentService{})
+			paymentv1.RegisterPaymentServiceServer(srv, paymentHandler)
+			if err := paymentv1.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+				panic(err)
+			}
 		default:
-			log.Println("Interface Handler Not Implemented")
+			log.Println("Interface Handler Not Implemented", key)
 		}
 	}
+
+	go httpgateway.StartHttpGateway(mux)
 
 	if err := core.StartServer(srv); err != nil {
 		panic(err)
 	}
-}
-
-type PluginConfig struct {
-	Plugins  []interfaces.PluginData `yaml:"plugins"`
-	Services []string                `yaml:"services"`
-}
-
-func ParsePluginYaml(src string) *PluginConfig {
-	data, err := os.ReadFile(src)
-	if err != nil {
-		panic(err)
-	}
-
-	result := PluginConfig{}
-	if err := yaml.Unmarshal(data, &result); err != nil {
-		panic(err)
-	}
-
-	return &result
 }
 
 func RegisterEmailPlugin(config interfaces.PluginData) {
@@ -159,4 +163,23 @@ func RegisterPaymentPlugin(config interfaces.PluginData) {
 		}
 	}
 	paymentService.RegisterNewPaymentPlugin(data)
+}
+
+type PluginConfig struct {
+	Plugins  []interfaces.PluginData `yaml:"plugins"`
+	Services []string                `yaml:"services"`
+}
+
+func ParsePluginYaml(src string) *PluginConfig {
+	data, err := os.ReadFile(src)
+	if err != nil {
+		panic(err)
+	}
+
+	result := PluginConfig{}
+	if err := yaml.Unmarshal(data, &result); err != nil {
+		panic(err)
+	}
+
+	return &result
 }

@@ -1,6 +1,7 @@
 services:
   - email
   - payment
+  - user
 plugins:
   - name: awsses
     interface: email
