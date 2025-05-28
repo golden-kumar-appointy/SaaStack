@@ -39,7 +39,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/paymentv1ChargePaymentRequest"
+              "$ref": "#/definitions/v1ChargePaymentRequest"
             }
           }
         ],
@@ -71,7 +71,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/paymentv1RefundPaymentRequest"
+              "$ref": "#/definitions/v1RefundPaymentRequest"
             }
           }
         ],
@@ -82,18 +82,7 @@
     }
   },
   "definitions": {
-    "paymentv1ChargePaymentRequest": {
-      "type": "object",
-      "properties": {
-        "pluginId": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/paymentv1ChargePaymentRequestChargeData"
-        }
-      }
-    },
-    "paymentv1ChargePaymentRequestChargeData": {
+    "ChargePaymentRequestChargeData": {
       "type": "object",
       "properties": {
         "Amount": {
@@ -105,18 +94,7 @@
         }
       }
     },
-    "paymentv1RefundPaymentRequest": {
-      "type": "object",
-      "properties": {
-        "pluginId": {
-          "type": "string"
-        },
-        "data": {
-          "$ref": "#/definitions/paymentv1RefundPaymentRequestRefundData"
-        }
-      }
-    },
-    "paymentv1RefundPaymentRequestRefundData": {
+    "RefundPaymentRequestRefundData": {
       "type": "object",
       "properties": {
         "paymentId": {
@@ -161,6 +139,28 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1ChargePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/ChargePaymentRequestChargeData"
+        }
+      }
+    },
+    "v1RefundPaymentRequest": {
+      "type": "object",
+      "properties": {
+        "pluginId": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/RefundPaymentRequestRefundData"
         }
       }
     }

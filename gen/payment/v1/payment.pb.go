@@ -325,6 +325,7 @@ var (
 		(*RefundPaymentRequest_RefundData)(nil), // 4: payment.v1.RefundPaymentRequest.RefundData
 	}
 )
+
 var file_payment_v1_payment_proto_depIdxs = []int32{
 	3, // 0: payment.v1.ChargePaymentRequest.data:type_name -> payment.v1.ChargePaymentRequest.ChargeData
 	4, // 1: payment.v1.RefundPaymentRequest.data:type_name -> payment.v1.RefundPaymentRequest.RefundData
