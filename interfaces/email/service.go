@@ -24,43 +24,6 @@ func RegisterNewEmailPlugin(pluginData types.PluginMapData) {
 	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
 }
 
-//	func init() {
-//		config := interfaces.ParsePluginYaml(configPath)
-//
-//		for _, plugin := range config.Plugins {
-//			if plugin.Deployment == string(interfaces.MICROSERVICE) {
-//				log.Println("Plugin deploy via microservice", plugin)
-//				pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-//					Plugin: plugin,
-//				}
-//			} else {
-//				log.Println("Plugin deploy via monolithic", plugin)
-//				// AWS Client
-//				awsSESClient := email.NewAmazonSES()
-//				// Mailgun Client
-//				mailgunClient := email.NewMailGun()
-//
-//				switch plugin.Name {
-//				case string(email.AWSSES_ID):
-//					pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-//						Plugin: plugin,
-//						Client: awsSESClient,
-//					}
-//
-//				case string(email.MAILGUN_ID):
-//					pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-//						Plugin: plugin,
-//						Client: mailgunClient,
-//					}
-//				default:
-//					log.Println("plugin is invalid", plugin)
-//				}
-//			}
-//		}
-//
-//		log.Println("Email PluginMap:", pluginMap)
-//	}
-
 type EmailService struct {
 	emailv1.UnimplementedEmailServiceServer
 }

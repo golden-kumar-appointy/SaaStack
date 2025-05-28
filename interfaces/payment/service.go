@@ -23,41 +23,6 @@ func RegisterNewPaymentPlugin(pluginData types.PluginMapData) {
 	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
 }
 
-// func init() {
-// 	config := interfaces.ParsePluginYaml(configPath)
-//
-// 	for _, plugin := range config.Plugins {
-// 		if plugin.Deployment == string(interfaces.MICROSERVICE) {
-// 			log.Println("Plugin deploy via microservice", plugin)
-// 			pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-// 				Plugin: plugin,
-// 			}
-// 		} else {
-// 			log.Println("Plugin deploy via monolithic", plugin)
-// 			// Razor Pay Client
-// 			razorpayClient := payment.NewRazorPayClient()
-// 			// Stripe Client
-// 			stripeClient := payment.NewStripeClient()
-//
-// 			switch plugin.Name {
-// 			case string(payment.RAZORPAY_ID):
-// 				pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-// 					Plugin: plugin,
-// 					Client: razorpayClient,
-// 				}
-//
-// 			case string(payment.STRIPE_ID):
-// 				pluginMap[interfaces.PluginID(plugin.Name)] = types.PluginMapData{
-// 					Plugin: plugin,
-// 					Client: stripeClient,
-// 				}
-// 			default:
-// 				log.Println("plugin is invalid", plugin)
-// 			}
-// 		}
-// 	}
-// }
-
 type PaymentService struct {
 	paymentv1.UnimplementedPaymentServiceServer
 }

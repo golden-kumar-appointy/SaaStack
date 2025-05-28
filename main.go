@@ -13,26 +13,72 @@ import (
 	"saastack/plugins/payment"
 )
 
-func main() {
-	srv := core.NewGrpcServer()
-
+func RegisterEmailPlugin() {
 	mailGun := email.NewMailGun()
-	emailService.RegisterNewEmailPlugin(emailType.PluginMapData{
+	emailData := emailType.PluginMapData{
 		Plugin: interfaces.PluginData{
 			Name:       "mailgun",
 			Deployment: string(interfaces.MONOLITHIC),
 		},
 		Client: mailGun,
-	})
+	}
+	emailService.RegisterNewEmailPlugin(emailData)
+	awsses := email.NewAmazonSES()
+	emailData = emailType.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name:       "awsses",
+			Deployment: string(interfaces.MONOLITHIC),
+		},
+		Client: awsses,
+	}
+	emailService.RegisterNewEmailPlugin(emailData)
 
+	emailData = emailType.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name:       "custom",
+			Deployment: string(interfaces.MICROSERVICE),
+			Source:     "localhost:9002",
+		},
+	}
+	emailService.RegisterNewEmailPlugin(emailData)
+}
+
+func RegisterPaymentPlugin() {
 	stripe := payment.NewStripeClient()
-	paymentService.RegisterNewPaymentPlugin(paymentType.PluginMapData{
+	payData := paymentType.PluginMapData{
 		Plugin: interfaces.PluginData{
 			Name:       "stripe",
 			Deployment: string(interfaces.MONOLITHIC),
 		},
 		Client: stripe,
-	})
+	}
+	paymentService.RegisterNewPaymentPlugin(payData)
+
+	razorpay := payment.NewRazorPayClient()
+	payData = paymentType.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name:       "razorpay",
+			Deployment: string(interfaces.MONOLITHIC),
+		},
+		Client: razorpay,
+	}
+	paymentService.RegisterNewPaymentPlugin(payData)
+
+	payData = paymentType.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name:       "custom",
+			Deployment: string(interfaces.MICROSERVICE),
+			Source:     "localhost:9003",
+		},
+	}
+	paymentService.RegisterNewPaymentPlugin(payData)
+}
+
+func main() {
+	srv := core.NewGrpcServer()
+
+	RegisterPaymentPlugin()
+	RegisterEmailPlugin()
 
 	emailv1.RegisterEmailServiceServer(srv, &emailService.EmailService{})
 	paymentv1.RegisterPaymentServiceServer(srv, &paymentService.PaymentService{})
