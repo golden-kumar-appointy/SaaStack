@@ -14,14 +14,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var configPath string = "interfaces/email/plugins.yaml"
-
-var pluginMap map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+var (
+	pluginMap     map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+	defaultPlugin string
+)
 
 func RegisterNewEmailPlugin(pluginData types.PluginMapData) {
 	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
+}
+
+func RegisterDefaultPlugin(name string) {
+	defaultPlugin = name
 }
 
 type EmailService struct {
@@ -34,6 +39,10 @@ func NewEmailService() *EmailService {
 
 func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("Email Service Req: ", req)
+
+	if len(req.PluginId) == 0 {
+		req.PluginId = defaultPlugin
+	}
 
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {

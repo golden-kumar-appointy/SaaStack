@@ -33,7 +33,7 @@ func ReadConfigFile() {
 	res := ParsePluginYaml(src)
 
 	for _, val := range res.Services {
-		Services[val] = true
+		Services[val] = false
 	}
 
 	for _, config := range res.Plugins {
@@ -46,8 +46,18 @@ func ReadConfigFile() {
 		switch config.Interface {
 		case "email":
 			RegisterEmailPlugin(config)
+			if !Services[config.Interface] {
+				emailService.RegisterDefaultPlugin(config.Name)
+				Services[config.Interface] = true
+				log.Println("Default plugin for email: ", config.Name)
+			}
 		case "payment":
 			RegisterPaymentPlugin(config)
+			if !Services[config.Interface] {
+				paymentService.RegisterDefaultPlugin(config.Name)
+				Services[config.Interface] = true
+				log.Println("Default plugin for payment: ", config.Name)
+			}
 		default:
 			log.Println("Interface not implemented", config.Interface)
 		}

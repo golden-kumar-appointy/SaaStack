@@ -13,14 +13,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var configPath string = "interfaces/payment/plugins.yaml"
-
-var pluginMap map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+var (
+	pluginMap     map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+	defaultPlugin string
+)
 
 func RegisterNewPaymentPlugin(pluginData types.PluginMapData) {
 	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
+}
+
+func RegisterDefaultPlugin(name string) {
+	defaultPlugin = name
 }
 
 type PaymentService struct {
@@ -33,6 +38,10 @@ func NewPaymentService() *PaymentService {
 
 func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Payment Charge req :", req)
+
+	if len(req.PluginId) == 0 {
+		req.PluginId = defaultPlugin
+	}
 
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
