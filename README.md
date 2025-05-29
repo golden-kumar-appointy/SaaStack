@@ -56,11 +56,14 @@ flowchart LR
 
 The project is organized into the following main directories:
 
-- `core/`: Core grpc Server.
+- `core/`: Core gRPC Server and HTTP Gateway.
 
-  - Provide a way to register gRPC service
-  - Provide a way to start gRPC server
-  - Independent of component
+  - `main.go`
+    - Provide a way to register gRPC service
+    - Provide a way to start gRPC server
+    - Independent of component
+  - `httpgateway.go`
+    - Handles HTTP requests and acts as a gateway to the core services.
 
 - `interfaces/`: Request router to plugin
 
@@ -73,8 +76,6 @@ The project is organized into the following main directories:
 - `docs/`: OpenApi spec file for each interface plugin.
 
 - `gen/`: Generated code, likely from protobuf definitions.
-
-- `http-gateway/`: Handles HTTP requests and acts as a gateway to the core services.
 
 - `proto/`: Protobuf definitions for each interface plugins.
 
@@ -89,10 +90,9 @@ services:
 plugins:
   - name: awsses
     interface: email # Service name
-    deployment: monolithic
   - name: custom
     interface: payment
-    deployment: microservice
+    deployment: microservice # Default: monolithic
     source: "localhost:9003"
 ```
 
