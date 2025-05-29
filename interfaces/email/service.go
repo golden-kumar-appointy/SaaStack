@@ -6,7 +6,6 @@ import (
 	"log"
 	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
-	"saastack/interfaces/email/types"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -15,11 +14,11 @@ import (
 )
 
 var (
-	pluginMap     map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+	pluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
 	defaultPlugin string
 )
 
-func RegisterNewEmailPlugin(pluginData types.PluginMapData) {
+func RegisterNewEmailPlugin(pluginData PluginMapData) {
 	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
@@ -58,12 +57,12 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
 		result, err := client.SendEmail(context.Background(), &reqData)
-		response = result
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Internal Server Error")
 		}
+		response = result
 	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
-		log.Println("microservice called")
+		log.Println("microservice email called")
 		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)

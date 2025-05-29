@@ -7,9 +7,9 @@ import (
 	"saastack/interfaces"
 )
 
-type MailGun struct{}
-
 const MAILGUN_ID interfaces.PluginID = "mailgun"
+
+type MailGun struct{}
 
 func (provider *MailGun) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("MailGun.sendEmail request:", req)

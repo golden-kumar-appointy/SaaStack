@@ -5,7 +5,6 @@ import (
 	"log"
 	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
-	"saastack/interfaces/payment/types"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -14,11 +13,11 @@ import (
 )
 
 var (
-	pluginMap     map[interfaces.PluginID]types.PluginMapData = make(map[interfaces.PluginID]types.PluginMapData)
+	pluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
 	defaultPlugin string
 )
 
-func RegisterNewPaymentPlugin(pluginData types.PluginMapData) {
+func RegisterNewPaymentPlugin(pluginData PluginMapData) {
 	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
@@ -63,7 +62,7 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 		}
 
 	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
-		log.Println("microservice called")
+		log.Println("microservice payment called")
 
 		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
@@ -85,6 +84,10 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Payment Refund req :", req)
 
+	if len(req.PluginId) == 0 {
+		req.PluginId = defaultPlugin
+	}
+
 	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
@@ -99,12 +102,12 @@ func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPa
 	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
 		client := plugin.Client
 		result, err := client.Refund(context.Background(), &reqData)
-		response = result
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Internal Server Error")
 		}
+		response = result
 	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
-		log.Println("microservice called")
+		log.Println("microservice payment called")
 		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)

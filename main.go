@@ -7,23 +7,63 @@ import (
 	"path"
 	"path/filepath"
 	"saastack/core"
-	emailv1 "saastack/gen/email/v1"
-	paymentv1 "saastack/gen/payment/v1"
-	httpgateway "saastack/http-gateway"
 	"saastack/interfaces"
-	emailService "saastack/interfaces/email"
-	emailType "saastack/interfaces/email/types"
-	paymentService "saastack/interfaces/payment"
-	paymentType "saastack/interfaces/payment/types"
 	"saastack/plugins/email"
 	"saastack/plugins/payment"
+
+	emailv1 "saastack/gen/email/v1"
+	paymentv1 "saastack/gen/payment/v1"
+
+	emailService "saastack/interfaces/email"
+	paymentService "saastack/interfaces/payment"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v3"
 )
 
-var Services map[string]bool = make(map[string]bool)
+var Services = make(map[string]bool)
+
+func main() {
+	// Register plugin to services(interfaces)
+	ReadConfigFile()
+
+	// gRPC Server
+	srv := core.NewGrpcServer()
+	emailHandler := emailService.NewEmailService()
+	paymentHandler := paymentService.NewPaymentService()
+
+	// HTTP Gateway
+	mux := core.NewMuxServer()
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+
+	// Register Service to core
+	for key := range Services {
+		switch key {
+		case "email":
+			emailv1.RegisterEmailServiceServer(srv, emailHandler)
+			if err := emailv1.RegisterEmailServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+				panic(err)
+			}
+		case "payment":
+			paymentv1.RegisterPaymentServiceServer(srv, paymentHandler)
+			if err := paymentv1.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+				panic(err)
+			}
+		default:
+			log.Println("Interface Handler Not Implemented", key)
+		}
+	}
+
+	go core.StartHttpGateway(mux)
+
+	if err := core.StartServer(srv); err != nil {
+		panic(err)
+	}
+}
 
 func ReadConfigFile() {
 	src := "config.yaml"
@@ -65,59 +105,20 @@ func ReadConfigFile() {
 	log.Println(res)
 }
 
-func main() {
-	ReadConfigFile()
-
-	// gRPC Server
-	srv := core.NewGrpcServer()
-	emailHandler := emailService.NewEmailService()
-	paymentHandler := paymentService.NewPaymentService()
-
-	// HTTP Gateway
-	mux := httpgateway.NewMuxServer()
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-
-	// Register Service to core
-	for key := range Services {
-		switch key {
-		case "email":
-			emailv1.RegisterEmailServiceServer(srv, emailHandler)
-			if err := emailv1.RegisterEmailServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
-				panic(err)
-			}
-		case "payment":
-			paymentv1.RegisterPaymentServiceServer(srv, paymentHandler)
-			if err := paymentv1.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
-				panic(err)
-			}
-		default:
-			log.Println("Interface Handler Not Implemented", key)
-		}
-	}
-
-	go httpgateway.StartHttpGateway(mux)
-
-	if err := core.StartServer(srv); err != nil {
-		panic(err)
-	}
-}
-
 func RegisterEmailPlugin(config interfaces.PluginData) {
-	var data emailType.PluginMapData
+	var data emailService.PluginMapData
 
 	if config.Deployment == string(interfaces.MICROSERVICE) {
-		data = emailType.PluginMapData{
+		data = emailService.PluginMapData{
 			Plugin: interfaces.PluginData{
 				Name:       config.Name,
 				Deployment: config.Deployment,
 				Source:     config.Source,
 			},
 		}
-	} else if config.Deployment == string(interfaces.MONOLITHIC) {
-		var client emailType.EmailPlugin
+	} else {
+		config.Deployment = string(interfaces.MONOLITHIC)
+		var client emailService.EmailPlugin
 
 		switch config.Name {
 		case "mailgun":
@@ -128,7 +129,7 @@ func RegisterEmailPlugin(config interfaces.PluginData) {
 			log.Println("Plugin Instance Not Implemented")
 			return
 		}
-		data = emailType.PluginMapData{
+		data = emailService.PluginMapData{
 			Plugin: interfaces.PluginData{
 				Name:       config.Name,
 				Deployment: config.Deployment,
@@ -141,18 +142,20 @@ func RegisterEmailPlugin(config interfaces.PluginData) {
 }
 
 func RegisterPaymentPlugin(config interfaces.PluginData) {
-	var data paymentType.PluginMapData
+	var data paymentService.PluginMapData
 
 	if config.Deployment == string(interfaces.MICROSERVICE) {
-		data = paymentType.PluginMapData{
+		data = paymentService.PluginMapData{
 			Plugin: interfaces.PluginData{
 				Name:       config.Name,
 				Deployment: config.Deployment,
 				Source:     config.Source,
 			},
 		}
-	} else if config.Deployment == string(interfaces.MONOLITHIC) {
-		var client paymentType.PaymentPlugin
+	} else {
+		config.Deployment = string(interfaces.MONOLITHIC)
+
+		var client paymentService.PaymentPlugin
 
 		switch config.Name {
 		case "stripe":
@@ -163,7 +166,7 @@ func RegisterPaymentPlugin(config interfaces.PluginData) {
 			log.Println("Plugin Instance Not Implemented")
 			return
 		}
-		data = paymentType.PluginMapData{
+		data = paymentService.PluginMapData{
 			Plugin: interfaces.PluginData{
 				Name:       config.Name,
 				Deployment: config.Deployment,

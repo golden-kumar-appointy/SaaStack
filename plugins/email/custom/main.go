@@ -11,14 +11,14 @@ import (
 	"google.golang.org/grpc"
 )
 
-type CustomEmail struct {
-	emailv1.UnimplementedEmailServiceServer
-}
-
 const (
 	CUSTOM_ID      interfaces.PluginID = "custom"
 	PLUGIN_ADDRESS string              = "localhost:9002"
 )
+
+type CustomEmail struct {
+	emailv1.UnimplementedEmailServiceServer
+}
 
 func (provider *CustomEmail) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("Custom.sendEmail request:", req)
@@ -39,8 +39,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
+	customEmail := NewCustomEmail()
 
-	emailv1.RegisterEmailServiceServer(grpcServer, &CustomEmail{})
+	emailv1.RegisterEmailServiceServer(grpcServer, customEmail)
 
 	log.Printf("custom email plugin server listening at %v", lis.Addr())
 

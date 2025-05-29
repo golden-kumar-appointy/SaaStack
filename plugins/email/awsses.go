@@ -7,9 +7,9 @@ import (
 	"saastack/interfaces"
 )
 
-type AmazonSES struct{}
-
 const AWSSES_ID interfaces.PluginID = "awsses"
+
+type AmazonSES struct{}
 
 func (provider *AmazonSES) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("AmazonSES.sendEmail request:", req)

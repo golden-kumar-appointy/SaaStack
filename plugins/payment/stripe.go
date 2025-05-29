@@ -7,9 +7,9 @@ import (
 	"saastack/interfaces"
 )
 
-type Stripe struct{}
-
 const STRIPE_ID interfaces.PluginID = "stripe"
+
+type Stripe struct{}
 
 func (provider *Stripe) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Charge request:", req)

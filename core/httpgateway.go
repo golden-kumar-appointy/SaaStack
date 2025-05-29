@@ -1,4 +1,4 @@
-package httpgateway
+package core
 
 import (
 	"log"
