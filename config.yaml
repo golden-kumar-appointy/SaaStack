@@ -3,6 +3,10 @@ services:
   - payment
   - user
 plugins:
+  - name: appointy
+    interface: email
+    deployment: microservice
+    source: "localhost:9005"
   - name: awsses
     interface: email
     deployment: monolithic # microservice
