@@ -26,67 +26,96 @@ sequenceDiagram
   E ->> EP : {data}
   EP ->> E : {response}
   E ->> C : {response}
-  C ->> P : {reponse}
-
+  C ->> P : {response}
 ```
 
 ## Architecture
 
 ![SaaStack Architecture](./docs/public/architechture.svg)
 
-## Project Strucuture
+```mermaid
+flowchart LR
+  User --> Req1
+  User --> Req2
+  Req1 --user.getPreference--> Core
+  Core --> UserHandler
+  UserHandler --getPreference--> Clerk
+  Clerk --Data--> UserHandler
+  UserHandler --> Core
+  Core --Data--> Req1
+
+  Req2 --email.Send--> Core
+  Core --> EmailHandler
+  EmailHandler --send--> Mailgun
+  Mailgun --data--> EmailHandler
+  EmailHandler --> Core
+  Core --data--> Req2
+```
+
+## Project Structure
 
 The project is organized into the following main directories:
 
-- `core/`: Core grpc Server.<http://localhost:8965/626>
-- `docs/`: OpenApi spec file for each interface plugin.
-- `gen/`: Generated code, likely from protobuf definitions.
-- `http-gateway/`: Handles HTTP requests and acts as a gateway to the core services.
-- `interfaces/`: Create interface handler for plugins(Handle Plugin Mapping and Calling the Plugin).
+- `core/`: Core grpc Server.
+
+  - Provide a way to register gRPC service
+  - Provide a way to start gRPC server
+  - Independent of component
+
+- `interfaces/`: Request router to plugin
+
+  - Provide a way to register plugins
+  - Contains logic of routing request to the specific plugin
+  - Only Depend of API Specification(Proto definition)
+
 - `plugins/`: Actual logic of plugin(Implement proto file)
+
+- `docs/`: OpenApi spec file for each interface plugin.
+
+- `gen/`: Generated code, likely from protobuf definitions.
+
+- `http-gateway/`: Handles HTTP requests and acts as a gateway to the core services.
+
 - `proto/`: Protobuf definitions for each interface plugins.
 
-## How to start project locally
+## How to use SaaStack
 
-Main package:
+1. Update the `config.yaml` file
 
-1. core/main.go
-2. http-gateway/main.go
-3. Plugin
+```yaml
+services:
+  - email # Service that you will use
+  - payment
+plugins:
+  - name: awsses
+    interface: email # Service name
+    deployment: monolithic
+  - name: custom
+    interface: payment
+    deployment: microservice
+    source: "localhost:9003"
+```
 
-   a. plugins/email/custom/main.go
+Working:
 
-   b. plugins/payment/custom/main.go
+> Register services to core
+> Register plugins to service
+> If user does not specify pluginId(while making request) then this plugin will be used as default
 
-### Steps
+2. Start SaaStack core, `go run main.go`
 
-1. **Build the project:**
-   Open your terminal and navigate to the project's root directory. Then, run the following command:
+#### Note
 
-   ```bash
-   make build
-   ```
+1. The first plugin of a service, will be used by default
 
-   This command will compile the core server, HTTP proxy, and the example plugins, placing the binaries in the `./bin` directory.
+2. You need to start plugins which are deploy as `microservice`.
 
-2. **Run the services:**
-   After a successful build, you can run the individual services. For example, to run the core server:
+In this repo, `plugins/{service}/custom` contains to that plugin.
 
-   ```bash
-   ./bin/core
-   ```
+To start these plugins:
 
-   Similarly, you can start the HTTP proxy and any plugins you intend to use:
+Custom email: `go run plugins/email/custom/main.go`
 
-   ```bash
-   ./bin/http-proxy
-   ```
+Custom payment: `go run plugins/payment/custom/main.go`
 
-3. **Run Custom Plugin:**
-   This plugins are deploy independently or at compile time.
-
-   ```bash
-   ./bin/plugins/payment
-   ./bin/plugins/email
-   ```
-
+3. When ever new plugin or service is updated, `main.go` need to be updated
