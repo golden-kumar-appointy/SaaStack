@@ -2,11 +2,11 @@
 // source: email/v1/email.proto
 
 /*
-Package emailv1 is a reverse proxy.
+Package emailpb is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package emailv1
+package emailpb
 
 import (
 	"context"

@@ -4,15 +4,15 @@
 // 	protoc        (unknown)
 // source: email/v1/email.proto
 
-package emailv1
+package emailpb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -193,9 +193,9 @@ const file_email_v1_email_proto_rawDesc = "" +
 	"\x02To\x18\x02 \x01(\tR\x02To\x12\x12\n" +
 	"\x04Body\x18\x03 \x01(\tR\x04Body2f\n" +
 	"\fEmailService\x12V\n" +
-	"\tSendEmail\x12\x1a.email.v1.SendEmailRequest\x1a\x12.email.v1.Response\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/email/sendBz\n" +
+	"\tSendEmail\x12\x1a.email.v1.SendEmailRequest\x1a\x12.email.v1.Response\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/email/sendBm\n" +
 	"\fcom.email.v1B\n" +
-	"EmailProtoP\x01Z\x1dsaastack/gen/email/v1;emailv1\xa2\x02\x03EXX\xaa\x02\bEmail.V1\xca\x02\bEmail\\V1\xe2\x02\x14Email\\V1\\GPBMetadata\xea\x02\tEmail::V1b\x06proto3"
+	"EmailProtoP\x01Z\x10email/v1;emailpb\xa2\x02\x03EXX\xaa\x02\bEmail.V1\xca\x02\bEmail\\V1\xe2\x02\x14Email\\V1\\GPBMetadata\xea\x02\tEmail::V1b\x06proto3"
 
 var (
 	file_email_v1_email_proto_rawDescOnce sync.Once
@@ -209,15 +209,12 @@ func file_email_v1_email_proto_rawDescGZIP() []byte {
 	return file_email_v1_email_proto_rawDescData
 }
 
-var (
-	file_email_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-	file_email_v1_email_proto_goTypes  = []any{
-		(*Response)(nil),                       // 0: email.v1.Response
-		(*SendEmailRequest)(nil),               // 1: email.v1.SendEmailRequest
-		(*SendEmailRequest_SendEmailData)(nil), // 2: email.v1.SendEmailRequest.SendEmailData
-	}
-)
-
+var file_email_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_email_v1_email_proto_goTypes = []any{
+	(*Response)(nil),                       // 0: email.v1.Response
+	(*SendEmailRequest)(nil),               // 1: email.v1.SendEmailRequest
+	(*SendEmailRequest_SendEmailData)(nil), // 2: email.v1.SendEmailRequest.SendEmailData
+}
 var file_email_v1_email_proto_depIdxs = []int32{
 	2, // 0: email.v1.SendEmailRequest.data:type_name -> email.v1.SendEmailRequest.SendEmailData
 	1, // 1: email.v1.EmailService.SendEmail:input_type -> email.v1.SendEmailRequest

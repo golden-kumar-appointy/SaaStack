@@ -2,11 +2,11 @@
 // source: payment/v1/payment.proto
 
 /*
-Package paymentv1 is a reverse proxy.
+Package paymentpb is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package paymentv1
+package paymentpb
 
 import (
 	"context"

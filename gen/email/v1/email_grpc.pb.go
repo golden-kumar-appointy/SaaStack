@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: email/v1/email.proto
 
-package emailv1
+package emailpb
 
 import (
 	context "context"

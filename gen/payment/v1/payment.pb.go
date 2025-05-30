@@ -4,15 +4,15 @@
 // 	protoc        (unknown)
 // source: payment/v1/payment.proto
 
-package paymentv1
+package paymentpb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -298,8 +298,8 @@ const file_payment_v1_payment_proto_rawDesc = "" +
 	"\x06Amount\x18\x02 \x01(\x03R\x06Amount2\xd2\x01\n" +
 	"\x0ePaymentService\x12_\n" +
 	"\x06Charge\x12 .payment.v1.ChargePaymentRequest\x1a\x14.payment.v1.Response\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/payment/charge\x12_\n" +
-	"\x06Refund\x12 .payment.v1.RefundPaymentRequest\x1a\x14.payment.v1.Response\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/payment/refundB\x8a\x01\n" +
-	"\x0ecom.payment.v1B\fPaymentProtoP\x01Z!saastack/gen/payment/v1;paymentv1\xa2\x02\x03PXX\xaa\x02\n" +
+	"\x06Refund\x12 .payment.v1.RefundPaymentRequest\x1a\x14.payment.v1.Response\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/payment/refundB}\n" +
+	"\x0ecom.payment.v1B\fPaymentProtoP\x01Z\x14payment/v1;paymentpb\xa2\x02\x03PXX\xaa\x02\n" +
 	"Payment.V1\xca\x02\n" +
 	"Payment\\V1\xe2\x02\x16Payment\\V1\\GPBMetadata\xea\x02\vPayment::V1b\x06proto3"
 
@@ -315,17 +315,14 @@ func file_payment_v1_payment_proto_rawDescGZIP() []byte {
 	return file_payment_v1_payment_proto_rawDescData
 }
 
-var (
-	file_payment_v1_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-	file_payment_v1_payment_proto_goTypes  = []any{
-		(*Response)(nil),                        // 0: payment.v1.Response
-		(*ChargePaymentRequest)(nil),            // 1: payment.v1.ChargePaymentRequest
-		(*RefundPaymentRequest)(nil),            // 2: payment.v1.RefundPaymentRequest
-		(*ChargePaymentRequest_ChargeData)(nil), // 3: payment.v1.ChargePaymentRequest.ChargeData
-		(*RefundPaymentRequest_RefundData)(nil), // 4: payment.v1.RefundPaymentRequest.RefundData
-	}
-)
-
+var file_payment_v1_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_payment_v1_payment_proto_goTypes = []any{
+	(*Response)(nil),                        // 0: payment.v1.Response
+	(*ChargePaymentRequest)(nil),            // 1: payment.v1.ChargePaymentRequest
+	(*RefundPaymentRequest)(nil),            // 2: payment.v1.RefundPaymentRequest
+	(*ChargePaymentRequest_ChargeData)(nil), // 3: payment.v1.ChargePaymentRequest.ChargeData
+	(*RefundPaymentRequest_RefundData)(nil), // 4: payment.v1.RefundPaymentRequest.RefundData
+}
 var file_payment_v1_payment_proto_depIdxs = []int32{
 	3, // 0: payment.v1.ChargePaymentRequest.data:type_name -> payment.v1.ChargePaymentRequest.ChargeData
 	4, // 1: payment.v1.RefundPaymentRequest.data:type_name -> payment.v1.RefundPaymentRequest.RefundData
