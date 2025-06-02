@@ -12,7 +12,9 @@ import (
 
 const RAZORPAY_ID interfaces.PluginID = "razorpay"
 
-type Razorpay struct{}
+type Razorpay struct {
+	paymentv1.UnimplementedPaymentServiceServer
+}
 
 func (provider *Razorpay) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	fmt.Println("Razorpay.Charge request:", req)

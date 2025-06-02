@@ -10,7 +10,9 @@ import (
 
 const MAILGUN_ID interfaces.PluginID = "mailgun"
 
-type MailGun struct{}
+type MailGun struct {
+	emailv1.UnimplementedEmailServiceServer
+}
 
 func (provider *MailGun) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("MailGun.sendEmail request:", req)

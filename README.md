@@ -31,7 +31,7 @@ sequenceDiagram
 
 ## Architecture
 
-![SaaStack Architecture](./docs/public/architechture.svg)
+![SaaStack Architecture](./public/architechture.svg)
 
 ```mermaid
 flowchart LR
@@ -90,10 +90,8 @@ services:
 plugins:
   - name: awsses
     interface: email # Service name
-  - name: custom
+  - name: stripe
     interface: payment
-    deployment: microservice # Default: monolithic
-    source: "localhost:9003"
 ```
 
 Working:

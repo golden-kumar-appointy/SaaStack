@@ -13,7 +13,9 @@ import (
 
 const STRIPE_ID interfaces.PluginID = "stripe"
 
-type Stripe struct{}
+type Stripe struct {
+	paymentv1.UnimplementedPaymentServiceServer
+}
 
 func (provider *Stripe) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Stripe.Charge request:", req)

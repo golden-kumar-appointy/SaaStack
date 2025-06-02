@@ -10,11 +10,13 @@ import (
 
 const AWSSES_ID interfaces.PluginID = "awsses"
 
-type AmazonSES struct{}
+type AmazonSES struct {
+	emailv1.UnimplementedEmailServiceServer
+}
 
 func (provider *AmazonSES) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("AmazonSES.sendEmail request:", req)
-	
+
 	response := emailv1.Response{
 		Msg: "AmazonSES: sent Email",
 	}
