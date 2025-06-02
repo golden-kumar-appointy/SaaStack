@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
-	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 	service "saastack/interfaces/payment"
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 
 	"google.golang.org/grpc"
 )

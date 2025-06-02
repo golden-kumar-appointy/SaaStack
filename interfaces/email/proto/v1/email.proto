@@ -2,7 +2,10 @@ syntax = "proto3";
 
 package email.v1;
 
-option go_package = "email/v1;emailpb";
+option go_package = "/v1;emailpb";
+
+option java_package = "com.example.email.v1";
+option java_outer_classname = "EmailProto";
 
 import "google/api/annotations.proto";
 

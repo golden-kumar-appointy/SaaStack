@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
-	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
+
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 )
 
 type EmailPlugin interface {

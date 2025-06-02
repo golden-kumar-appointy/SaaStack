@@ -3,9 +3,9 @@ package payment
 import (
 	"context"
 	"fmt"
-	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
 	service "saastack/interfaces/payment"
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 )
 
 const RAZORPAY_ID interfaces.PluginID = "razorpay"

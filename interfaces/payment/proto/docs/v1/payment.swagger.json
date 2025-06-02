@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "payment/v1/payment.proto",
+    "title": "v1/payment.proto",
     "version": "version not set"
   },
   "tags": [
@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/paymentv1Response"
+              "$ref": "#/definitions/v1Response"
             }
           },
           "default": {
@@ -55,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/paymentv1Response"
+              "$ref": "#/definitions/v1Response"
             }
           },
           "default": {
@@ -106,14 +106,6 @@
         }
       }
     },
-    "paymentv1Response": {
-      "type": "object",
-      "properties": {
-        "Msg": {
-          "type": "string"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -161,6 +153,14 @@
         },
         "data": {
           "$ref": "#/definitions/RefundPaymentRequestRefundData"
+        }
+      }
+    },
+    "v1Response": {
+      "type": "object",
+      "properties": {
+        "Msg": {
+          "type": "string"
         }
       }
     }

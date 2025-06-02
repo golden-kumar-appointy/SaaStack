@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"log"
-	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

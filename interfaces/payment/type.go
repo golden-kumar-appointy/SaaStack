@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
-	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 )
 
 type PaymentPlugin interface {

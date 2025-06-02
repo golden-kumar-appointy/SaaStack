@@ -11,11 +11,10 @@ import (
 	"saastack/plugins/email"
 	"saastack/plugins/payment"
 
-	emailv1 "saastack/gen/email/v1"
-	paymentv1 "saastack/gen/payment/v1"
-
 	emailService "saastack/interfaces/email"
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 	paymentService "saastack/interfaces/payment"
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

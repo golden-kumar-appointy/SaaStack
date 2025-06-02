@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
-	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
 	service "saastack/interfaces/email"
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 
 	"google.golang.org/grpc"
 )

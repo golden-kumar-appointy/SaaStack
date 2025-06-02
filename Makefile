@@ -7,8 +7,10 @@ build:
 	@go build -o ./bin/ main.go
 
 generate:
-	@echo "Generating from proto files"
-	@buf generate
+	@echo "Generating from email proto files"
+	@cd interfaces/email && buf generate && cd ../../
+	@echo "Generating from payment proto files"
+	@cd interfaces/payment && buf generate  && cd ../../
 
 clean:
 	@echo "Cleaning proto generate files"

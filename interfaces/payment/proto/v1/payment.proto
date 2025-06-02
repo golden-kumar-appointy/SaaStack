@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package payment.v1;
 
-option go_package = "payment/v1;paymentpb";
+option go_package = "/v1;paymentpb";
 
 import "google/api/annotations.proto";
 

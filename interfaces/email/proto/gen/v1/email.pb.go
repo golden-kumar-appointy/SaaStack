@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: email/v1/email.proto
+// source: v1/email.proto
 
 package emailpb
 
@@ -31,7 +31,7 @@ type Response struct {
 
 func (x *Response) Reset() {
 	*x = Response{}
-	mi := &file_email_v1_email_proto_msgTypes[0]
+	mi := &file_v1_email_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +43,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_email_v1_email_proto_msgTypes[0]
+	mi := &file_v1_email_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +56,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_email_v1_email_proto_rawDescGZIP(), []int{0}
+	return file_v1_email_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Response) GetMsg() string {
@@ -76,7 +76,7 @@ type SendEmailRequest struct {
 
 func (x *SendEmailRequest) Reset() {
 	*x = SendEmailRequest{}
-	mi := &file_email_v1_email_proto_msgTypes[1]
+	mi := &file_v1_email_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -88,7 +88,7 @@ func (x *SendEmailRequest) String() string {
 func (*SendEmailRequest) ProtoMessage() {}
 
 func (x *SendEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_email_v1_email_proto_msgTypes[1]
+	mi := &file_v1_email_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -101,7 +101,7 @@ func (x *SendEmailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendEmailRequest.ProtoReflect.Descriptor instead.
 func (*SendEmailRequest) Descriptor() ([]byte, []int) {
-	return file_email_v1_email_proto_rawDescGZIP(), []int{1}
+	return file_v1_email_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SendEmailRequest) GetPluginId() string {
@@ -129,7 +129,7 @@ type SendEmailRequest_SendEmailData struct {
 
 func (x *SendEmailRequest_SendEmailData) Reset() {
 	*x = SendEmailRequest_SendEmailData{}
-	mi := &file_email_v1_email_proto_msgTypes[2]
+	mi := &file_v1_email_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -141,7 +141,7 @@ func (x *SendEmailRequest_SendEmailData) String() string {
 func (*SendEmailRequest_SendEmailData) ProtoMessage() {}
 
 func (x *SendEmailRequest_SendEmailData) ProtoReflect() protoreflect.Message {
-	mi := &file_email_v1_email_proto_msgTypes[2]
+	mi := &file_v1_email_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +154,7 @@ func (x *SendEmailRequest_SendEmailData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendEmailRequest_SendEmailData.ProtoReflect.Descriptor instead.
 func (*SendEmailRequest_SendEmailData) Descriptor() ([]byte, []int) {
-	return file_email_v1_email_proto_rawDescGZIP(), []int{1, 0}
+	return file_v1_email_proto_rawDescGZIP(), []int{1, 0}
 }
 
 func (x *SendEmailRequest_SendEmailData) GetFrom() string {
@@ -178,11 +178,11 @@ func (x *SendEmailRequest_SendEmailData) GetBody() string {
 	return ""
 }
 
-var File_email_v1_email_proto protoreflect.FileDescriptor
+var File_v1_email_proto protoreflect.FileDescriptor
 
-const file_email_v1_email_proto_rawDesc = "" +
+const file_v1_email_proto_rawDesc = "" +
 	"\n" +
-	"\x14email/v1/email.proto\x12\bemail.v1\x1a\x1cgoogle/api/annotations.proto\"\x1c\n" +
+	"\x0ev1/email.proto\x12\bemail.v1\x1a\x1cgoogle/api/annotations.proto\"\x1c\n" +
 	"\bResponse\x12\x10\n" +
 	"\x03Msg\x18\x01 \x01(\tR\x03Msg\"\xb5\x01\n" +
 	"\x10SendEmailRequest\x12\x1a\n" +
@@ -193,29 +193,29 @@ const file_email_v1_email_proto_rawDesc = "" +
 	"\x02To\x18\x02 \x01(\tR\x02To\x12\x12\n" +
 	"\x04Body\x18\x03 \x01(\tR\x04Body2f\n" +
 	"\fEmailService\x12V\n" +
-	"\tSendEmail\x12\x1a.email.v1.SendEmailRequest\x1a\x12.email.v1.Response\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/email/sendBm\n" +
+	"\tSendEmail\x12\x1a.email.v1.SendEmailRequest\x1a\x12.email.v1.Response\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/email/sendBh\n" +
 	"\fcom.email.v1B\n" +
-	"EmailProtoP\x01Z\x10email/v1;emailpb\xa2\x02\x03EXX\xaa\x02\bEmail.V1\xca\x02\bEmail\\V1\xe2\x02\x14Email\\V1\\GPBMetadata\xea\x02\tEmail::V1b\x06proto3"
+	"EmailProtoP\x01Z\v/v1;emailpb\xa2\x02\x03EXX\xaa\x02\bEmail.V1\xca\x02\bEmail\\V1\xe2\x02\x14Email\\V1\\GPBMetadata\xea\x02\tEmail::V1b\x06proto3"
 
 var (
-	file_email_v1_email_proto_rawDescOnce sync.Once
-	file_email_v1_email_proto_rawDescData []byte
+	file_v1_email_proto_rawDescOnce sync.Once
+	file_v1_email_proto_rawDescData []byte
 )
 
-func file_email_v1_email_proto_rawDescGZIP() []byte {
-	file_email_v1_email_proto_rawDescOnce.Do(func() {
-		file_email_v1_email_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_email_v1_email_proto_rawDesc), len(file_email_v1_email_proto_rawDesc)))
+func file_v1_email_proto_rawDescGZIP() []byte {
+	file_v1_email_proto_rawDescOnce.Do(func() {
+		file_v1_email_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_v1_email_proto_rawDesc), len(file_v1_email_proto_rawDesc)))
 	})
-	return file_email_v1_email_proto_rawDescData
+	return file_v1_email_proto_rawDescData
 }
 
-var file_email_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_email_v1_email_proto_goTypes = []any{
+var file_v1_email_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_v1_email_proto_goTypes = []any{
 	(*Response)(nil),                       // 0: email.v1.Response
 	(*SendEmailRequest)(nil),               // 1: email.v1.SendEmailRequest
 	(*SendEmailRequest_SendEmailData)(nil), // 2: email.v1.SendEmailRequest.SendEmailData
 }
-var file_email_v1_email_proto_depIdxs = []int32{
+var file_v1_email_proto_depIdxs = []int32{
 	2, // 0: email.v1.SendEmailRequest.data:type_name -> email.v1.SendEmailRequest.SendEmailData
 	1, // 1: email.v1.EmailService.SendEmail:input_type -> email.v1.SendEmailRequest
 	0, // 2: email.v1.EmailService.SendEmail:output_type -> email.v1.Response
@@ -226,26 +226,26 @@ var file_email_v1_email_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_email_v1_email_proto_init() }
-func file_email_v1_email_proto_init() {
-	if File_email_v1_email_proto != nil {
+func init() { file_v1_email_proto_init() }
+func file_v1_email_proto_init() {
+	if File_v1_email_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_email_v1_email_proto_rawDesc), len(file_email_v1_email_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_email_proto_rawDesc), len(file_v1_email_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_email_v1_email_proto_goTypes,
-		DependencyIndexes: file_email_v1_email_proto_depIdxs,
-		MessageInfos:      file_email_v1_email_proto_msgTypes,
+		GoTypes:           file_v1_email_proto_goTypes,
+		DependencyIndexes: file_v1_email_proto_depIdxs,
+		MessageInfos:      file_v1_email_proto_msgTypes,
 	}.Build()
-	File_email_v1_email_proto = out.File
-	file_email_v1_email_proto_goTypes = nil
-	file_email_v1_email_proto_depIdxs = nil
+	File_v1_email_proto = out.File
+	file_v1_email_proto_goTypes = nil
+	file_v1_email_proto_depIdxs = nil
 }

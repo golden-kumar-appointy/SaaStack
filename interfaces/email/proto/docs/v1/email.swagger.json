@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "email/v1/email.proto",
+    "title": "v1/email.proto",
     "version": "version not set"
   },
   "tags": [
@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/emailv1Response"
+              "$ref": "#/definitions/v1Response"
             }
           },
           "default": {
@@ -64,14 +64,6 @@
         }
       }
     },
-    "emailv1Response": {
-      "type": "object",
-      "properties": {
-        "Msg": {
-          "type": "string"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -97,6 +89,14 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1Response": {
+      "type": "object",
+      "properties": {
+        "Msg": {
+          "type": "string"
         }
       }
     },

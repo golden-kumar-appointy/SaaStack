@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
-	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

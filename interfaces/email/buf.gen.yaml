@@ -3,17 +3,17 @@ managed:
   enabled: true
 plugins:
   - remote: buf.build/protocolbuffers/go
-    out: gen
+    out: proto/gen
     opt: paths=source_relative
   - remote: buf.build/grpc/go
-    out: gen
+    out: proto/gen
     opt: paths=source_relative
   - local: protoc-gen-grpc-gateway
-    out: gen
+    out: proto/gen
     opt:
       - paths=source_relative
       - generate_unbound_methods=true
   - remote: buf.build/grpc-ecosystem/openapiv2
-    out: docs
+    out: proto/docs
 inputs:
   - directory: proto

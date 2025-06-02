@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"saastack/core"
-	emailv1 "saastack/gen/email/v1"
-	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 	service "saastack/interfaces/payment"
+	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

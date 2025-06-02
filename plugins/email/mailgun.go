@@ -3,9 +3,9 @@ package email
 import (
 	"context"
 	"fmt"
-	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
 	service "saastack/interfaces/email"
+	emailv1 "saastack/interfaces/email/proto/gen/v1"
 )
 
 const MAILGUN_ID interfaces.PluginID = "mailgun"
