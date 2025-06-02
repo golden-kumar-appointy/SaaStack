@@ -14,7 +14,8 @@ generate:
 
 clean:
 	@echo "Cleaning proto generate files"
-	@rm -r gen/
+	@rm -r interfaces/email/proto/gen/
+	@rm -r interfaces/payment/proto/gen/
 	@echo "Cleaning generate docs"
-	@rm -r docs/email/
-	@rm -r docs/payment/
+	@rm -r interfaces/email/proto/docs/
+	@rm -r interfaces/payment/proto/docs/
