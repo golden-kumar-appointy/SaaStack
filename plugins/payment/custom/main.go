@@ -7,6 +7,7 @@ import (
 	"net"
 	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/payment"
 
 	"google.golang.org/grpc"
 )
@@ -38,7 +39,7 @@ func (provider *CustomPayment) Refund(_ context.Context, req *paymentv1.RefundPa
 	return &response, nil
 }
 
-func NewCustomPayment() *CustomPayment {
+func NewCustomPayment() service.PaymentPlugin {
 	return &CustomPayment{}
 }
 

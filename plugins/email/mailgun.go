@@ -5,6 +5,7 @@ import (
 	"fmt"
 	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/email"
 )
 
 const MAILGUN_ID interfaces.PluginID = "mailgun"
@@ -20,6 +21,6 @@ func (provider *MailGun) SendEmail(_ context.Context, req *emailv1.SendEmailRequ
 	return &response, nil
 }
 
-func NewMailGun() *MailGun {
+func NewMailGun() service.EmailPlugin {
 	return &MailGun{}
 }

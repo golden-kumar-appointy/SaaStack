@@ -7,6 +7,7 @@ import (
 	"net"
 	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/email"
 
 	"google.golang.org/grpc"
 )
@@ -29,7 +30,7 @@ func (provider *CustomEmail) SendEmail(_ context.Context, req *emailv1.SendEmail
 	return &response, nil
 }
 
-func NewCustomEmail() *CustomEmail {
+func NewCustomEmail() service.EmailPlugin {
 	return &CustomEmail{}
 }
 
@@ -39,9 +40,8 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	customEmail := NewCustomEmail()
 
-	emailv1.RegisterEmailServiceServer(grpcServer, customEmail)
+	emailv1.RegisterEmailServiceServer(grpcServer, &CustomEmail{})
 
 	log.Printf("custom email plugin server listening at %v", lis.Addr())
 

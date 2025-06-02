@@ -5,6 +5,7 @@ import (
 	"fmt"
 	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/payment"
 )
 
 const STRIPE_ID interfaces.PluginID = "stripe"
@@ -29,6 +30,6 @@ func (provider *Stripe) Refund(_ context.Context, req *paymentv1.RefundPaymentRe
 	return &response, nil
 }
 
-func NewStripeClient() *Stripe {
+func NewStripeClient() service.PaymentPlugin {
 	return &Stripe{}
 }

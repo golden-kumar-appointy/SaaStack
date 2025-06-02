@@ -5,6 +5,7 @@ import (
 	"fmt"
 	emailv1 "saastack/gen/email/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/email"
 )
 
 const AWSSES_ID interfaces.PluginID = "awsses"
@@ -20,6 +21,6 @@ func (provider *AmazonSES) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 	return &response, nil
 }
 
-func NewAmazonSES() *AmazonSES {
+func NewAmazonSES() service.EmailPlugin {
 	return &AmazonSES{}
 }

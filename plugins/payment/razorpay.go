@@ -5,6 +5,7 @@ import (
 	"fmt"
 	paymentv1 "saastack/gen/payment/v1"
 	"saastack/interfaces"
+	service "saastack/interfaces/payment"
 )
 
 const RAZORPAY_ID interfaces.PluginID = "razorpay"
@@ -29,6 +30,6 @@ func (provider *Razorpay) Refund(_ context.Context, req *paymentv1.RefundPayment
 	return &response, nil
 }
 
-func NewRazorPayClient() *Razorpay {
+func NewRazorPayClient() service.PaymentPlugin {
 	return &Razorpay{}
 }
