@@ -12,18 +12,18 @@ import (
 )
 
 var (
-	pluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
-	defaultPlugin string
+	PluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
+	DefaultPlugin string
 )
 
 func RegisterNewEmailPlugin(pluginData PluginMapData) {
-	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
+	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
 }
 
 func RegisterDefaultPlugin(name string) {
-	defaultPlugin = name
+	DefaultPlugin = name
 }
 
 type EmailService struct {
@@ -38,10 +38,10 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 	fmt.Println("Email Service Req: ", req)
 
 	if len(req.PluginId) == 0 {
-		req.PluginId = defaultPlugin
+		req.PluginId = DefaultPlugin
 	}
 
-	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
+	plugin, ok := PluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}

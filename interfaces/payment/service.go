@@ -8,15 +8,16 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
 )
 
 var (
-	pluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
+	PluginMap map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
 	defaultPlugin string
 )
 
 func RegisterNewPaymentPlugin(pluginData PluginMapData) {
-	pluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
+	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
 
 	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
 }
@@ -40,7 +41,7 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 		req.PluginId = defaultPlugin
 	}
 
-	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
+	plugin, ok := PluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
@@ -65,8 +66,8 @@ func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPa
 	if len(req.PluginId) == 0 {
 		req.PluginId = defaultPlugin
 	}
-
-	plugin, ok := pluginMap[interfaces.PluginID(req.PluginId)]
+	
+	plugin, ok := PluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}

@@ -14,7 +14,7 @@ type AmazonSES struct{}
 
 func (provider *AmazonSES) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
 	fmt.Println("AmazonSES.sendEmail request:", req)
-
+	
 	response := emailv1.Response{
 		Msg: "AmazonSES: sent Email",
 	}
