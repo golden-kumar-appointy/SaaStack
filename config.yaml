@@ -8,13 +8,9 @@ plugins:
     interface: email
   - name: custom
     interface: email
-    deployment: microservice
-    source: "localhost:9002"
   - name: razorpay
     interface: payment
   - name: stripe
     interface: payment
   - name: custom
     interface: payment
-    deployment: microservice
-    source: "localhost:9003"

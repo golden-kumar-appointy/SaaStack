@@ -107,72 +107,47 @@ func ReadConfigFile() {
 func RegisterEmailPlugin(config interfaces.PluginData) {
 	var data emailService.PluginMapData
 
-	if config.Deployment == string(interfaces.MICROSERVICE) {
-		data = emailService.PluginMapData{
-			Plugin: interfaces.PluginData{
-				Name:       config.Name,
-				Deployment: config.Deployment,
-				Source:     config.Source,
-			},
-		}
-	} else {
-		config.Deployment = string(interfaces.MONOLITHIC)
-		var client emailService.EmailPlugin
-
-		switch config.Name {
-		case "mailgun":
-			client = email.NewMailGun()
-		case "awsses":
-			client = email.NewAmazonSES()
-		default:
-			log.Println("Plugin Instance Not Implemented")
-			return
-		}
-		data = emailService.PluginMapData{
-			Plugin: interfaces.PluginData{
-				Name:       config.Name,
-				Deployment: config.Deployment,
-				Source:     config.Source,
-			},
-			Client: client,
-		}
+	var client emailService.EmailPlugin
+	switch config.Name {
+	case "mailgun":
+		client = email.NewMailGun()
+	case "awsses":
+		client = email.NewAmazonSES()
+	default:
+		log.Println("Plugin Instance Not Implemented")
+		return
 	}
+
+	data = emailService.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name: config.Name,
+		},
+		Client: client,
+	}
+
 	emailService.RegisterNewEmailPlugin(data)
 }
 
 func RegisterPaymentPlugin(config interfaces.PluginData) {
 	var data paymentService.PluginMapData
 
-	if config.Deployment == string(interfaces.MICROSERVICE) {
-		data = paymentService.PluginMapData{
-			Plugin: interfaces.PluginData{
-				Name:       config.Name,
-				Deployment: config.Deployment,
-				Source:     config.Source,
-			},
-		}
-	} else {
-		config.Deployment = string(interfaces.MONOLITHIC)
+	var client paymentService.PaymentPlugin
 
-		var client paymentService.PaymentPlugin
+	switch config.Name {
+	case "stripe":
+		client = payment.NewStripeClient()
+	case "razorpay":
+		client = payment.NewRazorPayClient()
+	default:
+		log.Println("Plugin Instance Not Implemented")
+		return
+	}
 
-		switch config.Name {
-		case "stripe":
-			client = payment.NewStripeClient()
-		case "razorpay":
-			client = payment.NewRazorPayClient()
-		default:
-			log.Println("Plugin Instance Not Implemented")
-			return
-		}
-		data = paymentService.PluginMapData{
-			Plugin: interfaces.PluginData{
-				Name:       config.Name,
-				Deployment: config.Deployment,
-				Source:     config.Source,
-			},
-			Client: client,
-		}
+	data = paymentService.PluginMapData{
+		Plugin: interfaces.PluginData{
+			Name: config.Name,
+		},
+		Client: client,
 	}
 	paymentService.RegisterNewPaymentPlugin(data)
 }

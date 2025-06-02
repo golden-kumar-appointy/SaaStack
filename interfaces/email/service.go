@@ -7,9 +7,7 @@ import (
 	"saastack/interfaces"
 	emailv1 "saastack/interfaces/email/proto/gen/v1"
 
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -48,34 +46,15 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	var response *emailv1.Response
 	reqData := emailv1.SendEmailRequest{
 		PluginId: plugin.Plugin.Name,
 		Data:     req.Data,
 	}
 
-	if plugin.Plugin.Deployment == string(interfaces.MONOLITHIC) {
-		client := plugin.Client
-		result, err := client.SendEmail(context.Background(), &reqData)
-		if err != nil {
-			return nil, status.Errorf(codes.Internal, "Internal Server Error")
-		}
-		response = result
-	} else if plugin.Plugin.Deployment == string(interfaces.MICROSERVICE) {
-		log.Println("microservice email called")
-		conn, err := grpc.NewClient(plugin.Plugin.Source, grpc.WithTransportCredentials(insecure.NewCredentials()))
-		if err != nil {
-			panic(err)
-		}
-		defer conn.Close()
-
-		client := emailv1.NewEmailServiceClient(conn)
-		result, err := client.SendEmail(context.Background(), &reqData)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-		response = result
+	client := plugin.Client
+	response, err := client.SendEmail(context.Background(), &reqData)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Internal Server Error")
 	}
 
 	return response, nil
