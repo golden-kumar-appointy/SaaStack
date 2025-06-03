@@ -1,0 +1,17 @@
+interfaces:
+  - name: notification
+  - name: payment
+  - name: bookstore
+plugins:
+  - name: email
+    interface: notification
+    instance: NewEmailPlugin
+    deployment: Monolithic
+  - name: stripe
+    interface: payment
+    instance: NewStripePlugin
+    deployment: Monolithic
+  - name: bookstore
+    interface: bookstore
+    instance: NewBookstorePlugin
+    deployment: Monolithic

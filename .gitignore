@@ -1,7 +1,1 @@
-bin/
-
-config.test.yaml
-
-plugins/email/appointy/
-
-interfaces/generator/test/
+.env

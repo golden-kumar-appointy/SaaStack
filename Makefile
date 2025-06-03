@@ -1,21 +1,25 @@
-.PHONY: build generate clean
+.PHONY: all clean generate build run
 
-all: clean generate build
-
-build:
-	@echo "Building from main.go after reading config.yaml"
-	@go build -o ./bin/ main.go
-
-generate:
-	@echo "Generating from email proto files"
-	@cd interfaces/email && buf generate && cd ../../
-	@echo "Generating from payment proto files"
-	@cd interfaces/payment && buf generate  && cd ../../
+all: clean generate build run
 
 clean:
-	@echo "Cleaning proto generate files"
-	@rm -r interfaces/email/proto/gen/
-	@rm -r interfaces/payment/proto/gen/
-	@echo "Cleaning generate docs"
-	@rm -r interfaces/email/proto/docs/
-	@rm -r interfaces/payment/proto/docs/
+	@echo "Cleaning..."
+	@rm -rf bin/
+	@rm -rf interfaces/notification/proto/*.pb.go
+	@rm -rf interfaces/notification/proto/*.gw.go
+	@rm -rf interfaces/payment/proto/*.pb.go
+	@rm -rf interfaces/payment/proto/*.gw.go
+
+generate:
+	@echo "Generating protobuf code..."
+	@chmod +x ./generate.sh
+	@./generate.sh
+
+build:
+	@echo "Building application..."
+	@go build -o bin/server main.go
+
+run:
+	@echo "Running server..."
+	@./bin/server
+
