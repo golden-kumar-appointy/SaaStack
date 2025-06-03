@@ -4,10 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"saastack/core"
 	"saastack/interfaces"
-	emailv1 "saastack/interfaces/email/proto/gen/v1"
+	emailpb "saastack/interfaces/email/proto/gen/v1"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 )
 
@@ -16,25 +20,11 @@ var (
 	DefaultPlugin string
 )
 
-func RegisterNewEmailPlugin(pluginData PluginMapData) {
-	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
-
-	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
+type Service struct {
+	emailpb.UnimplementedEmailServiceServer
 }
 
-func RegisterDefaultPlugin(name string) {
-	DefaultPlugin = name
-}
-
-type EmailService struct {
-	emailv1.UnimplementedEmailServiceServer
-}
-
-func NewEmailService() *EmailService {
-	return &EmailService{}
-}
-
-func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRequest) (*emailv1.Response, error) {
+func (service *Service) SendEmail(_ context.Context, req *emailpb.SendEmailRequest) (*emailpb.Response, error) {
 	fmt.Println("Email Service Req: ", req)
 
 	if len(req.PluginId) == 0 {
@@ -46,7 +36,7 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	reqData := emailv1.SendEmailRequest{
+	reqData := emailpb.SendEmailRequest{
 		PluginId: plugin.Plugin.Name,
 		Data:     req.Data,
 	}
@@ -58,4 +48,30 @@ func (email *EmailService) SendEmail(_ context.Context, req *emailv1.SendEmailRe
 	}
 
 	return response, nil
+}
+
+func NewService() *Service {
+	return &Service{}
+}
+
+func RegisterNewPlugin(pluginData PluginMapData) {
+	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
+
+	log.Println("Added Plugin to Email interface", pluginData.Plugin.Name)
+}
+
+func RegisterDefaultPlugin(name string) {
+	DefaultPlugin = name
+}
+
+func RegisterGrpcHandler(srv *grpc.Server) {
+	emailpb.RegisterEmailServiceServer(srv, NewService())
+}
+
+func RegisterHTTPHandler(srv *grpc.Server, mux *runtime.ServeMux, ctx context.Context) {
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+
+	if err := emailpb.RegisterEmailServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+		panic(err)
+	}
 }

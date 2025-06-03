@@ -6,11 +6,7 @@ plugins:
     interface: email
   - name: mailgun
     interface: email
-  - name: custom
-    interface: email
   - name: razorpay
     interface: payment
   - name: stripe
-    interface: payment
-  - name: custom
     interface: payment

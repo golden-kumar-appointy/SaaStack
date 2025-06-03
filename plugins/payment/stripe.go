@@ -20,7 +20,8 @@ type Stripe struct {
 func (provider *Stripe) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
 	log.Println("Stripe.Charge request:", req)
 
-	res1, err := emailservice.PluginMap[interfaces.PluginID(emailservice.DefaultPlugin)].Client.SendEmail(context.Background(), &emailv1.SendEmailRequest{
+	client := emailservice.PluginMap[interfaces.PluginID(emailservice.DefaultPlugin)].Client
+	res1, err := client.SendEmail(context.Background(), &emailv1.SendEmailRequest{
 		Data: &emailv1.SendEmailRequest_SendEmailData{
 			From: "razorpay@payment.com",
 			To:   "test@test.com",
@@ -41,7 +42,8 @@ func (provider *Stripe) Charge(_ context.Context, req *paymentv1.ChargePaymentRe
 func (provider *Stripe) Refund(_ context.Context, req *paymentv1.RefundPaymentRequest) (*paymentv1.Response, error) {
 	fmt.Println("Stripe.Refund request:", req)
 
-	res1, err := emailservice.PluginMap[interfaces.PluginID(emailservice.DefaultPlugin)].Client.SendEmail(context.Background(), &emailv1.SendEmailRequest{
+	client := emailservice.PluginMap[interfaces.PluginID(emailservice.DefaultPlugin)].Client
+	res1, err := client.SendEmail(context.Background(), &emailv1.SendEmailRequest{
 		Data: &emailv1.SendEmailRequest_SendEmailData{
 			From: "razorpay@payment.com",
 			To:   "test@test.com",

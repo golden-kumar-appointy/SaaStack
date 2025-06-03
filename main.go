@@ -12,12 +12,8 @@ import (
 	"saastack/plugins/payment"
 
 	emailService "saastack/interfaces/email"
-	emailv1 "saastack/interfaces/email/proto/gen/v1"
 	paymentService "saastack/interfaces/payment"
-	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v3"
 )
 
@@ -29,29 +25,22 @@ func main() {
 
 	// gRPC Server
 	srv := core.NewGrpcServer()
-	emailHandler := emailService.NewEmailService()
-	paymentHandler := paymentService.NewPaymentService()
 
 	// HTTP Gateway
 	mux := core.NewMuxServer()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Register Service to core
 	for key := range Services {
 		switch key {
 		case "email":
-			emailv1.RegisterEmailServiceServer(srv, emailHandler)
-			if err := emailv1.RegisterEmailServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
-				panic(err)
-			}
+			emailService.RegisterGrpcHandler(srv)
+			emailService.RegisterHTTPHandler(srv, mux, ctx)
 		case "payment":
-			paymentv1.RegisterPaymentServiceServer(srv, paymentHandler)
-			if err := paymentv1.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
-				panic(err)
-			}
+			paymentService.RegisterGrpcHandler(srv)
+			paymentService.RegisterHTTPHandler(srv, mux, ctx)
 		default:
 			log.Println("Interface Handler Not Implemented", key)
 		}
@@ -108,6 +97,7 @@ func RegisterEmailPlugin(config interfaces.PluginData) {
 	var data emailService.PluginMapData
 
 	var client emailService.EmailPlugin
+
 	switch config.Name {
 	case "mailgun":
 		client = email.NewMailGun()
@@ -125,7 +115,7 @@ func RegisterEmailPlugin(config interfaces.PluginData) {
 		Client: client,
 	}
 
-	emailService.RegisterNewEmailPlugin(data)
+	emailService.RegisterNewPlugin(data)
 }
 
 func RegisterPaymentPlugin(config interfaces.PluginData) {
@@ -149,7 +139,7 @@ func RegisterPaymentPlugin(config interfaces.PluginData) {
 		},
 		Client: client,
 	}
-	paymentService.RegisterNewPaymentPlugin(data)
+	paymentService.RegisterNewPlugin(data)
 }
 
 type PluginConfig struct {

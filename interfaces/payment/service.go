@@ -3,42 +3,31 @@ package service
 import (
 	"context"
 	"log"
+	"saastack/core"
 	"saastack/interfaces"
-	paymentv1 "saastack/interfaces/payment/proto/gen/v1"
+	paymentpb "saastack/interfaces/payment/proto/gen/v1"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
-
 )
 
 var (
-	PluginMap map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
-	defaultPlugin string
+	PluginMap     map[interfaces.PluginID]PluginMapData = make(map[interfaces.PluginID]PluginMapData)
+	DefaultPlugin string
 )
 
-func RegisterNewPaymentPlugin(pluginData PluginMapData) {
-	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
-
-	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
+type Service struct {
+	paymentpb.UnimplementedPaymentServiceServer
 }
 
-func RegisterDefaultPlugin(name string) {
-	defaultPlugin = name
-}
-
-type PaymentService struct {
-	paymentv1.UnimplementedPaymentServiceServer
-}
-
-func NewPaymentService() *PaymentService {
-	return &PaymentService{}
-}
-
-func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePaymentRequest) (*paymentv1.Response, error) {
+func (service *Service) Charge(_ context.Context, req *paymentpb.ChargePaymentRequest) (*paymentpb.Response, error) {
 	log.Println("Payment Charge req :", req)
 
 	if len(req.PluginId) == 0 {
-		req.PluginId = defaultPlugin
+		req.PluginId = DefaultPlugin
 	}
 
 	plugin, ok := PluginMap[interfaces.PluginID(req.PluginId)]
@@ -46,7 +35,7 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	reqData := paymentv1.ChargePaymentRequest{
+	reqData := paymentpb.ChargePaymentRequest{
 		PluginId: plugin.Plugin.Name,
 		Data:     req.Data,
 	}
@@ -60,19 +49,19 @@ func (payment *PaymentService) Charge(_ context.Context, req *paymentv1.ChargePa
 	return response, nil
 }
 
-func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPaymentRequest) (*paymentv1.Response, error) {
+func (service *Service) Refund(_ context.Context, req *paymentpb.RefundPaymentRequest) (*paymentpb.Response, error) {
 	log.Println("Payment Refund req :", req)
 
 	if len(req.PluginId) == 0 {
-		req.PluginId = defaultPlugin
+		req.PluginId = DefaultPlugin
 	}
-	
+
 	plugin, ok := PluginMap[interfaces.PluginID(req.PluginId)]
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "invalid plugin id")
 	}
 
-	reqData := paymentv1.RefundPaymentRequest{
+	reqData := paymentpb.RefundPaymentRequest{
 		PluginId: plugin.Plugin.Name,
 		Data:     req.Data,
 	}
@@ -84,4 +73,30 @@ func (payment *PaymentService) Refund(_ context.Context, req *paymentv1.RefundPa
 	}
 
 	return response, nil
+}
+
+func NewService() *Service {
+	return &Service{}
+}
+
+func RegisterNewPlugin(pluginData PluginMapData) {
+	PluginMap[interfaces.PluginID(pluginData.Plugin.Name)] = pluginData
+
+	log.Println("Added Plugin to Payment interface", pluginData.Plugin.Name)
+}
+
+func RegisterDefaultPlugin(name string) {
+	DefaultPlugin = name
+}
+
+func RegisterGrpcHandler(srv *grpc.Server) {
+	paymentpb.RegisterPaymentServiceServer(srv, NewService())
+}
+
+func RegisterHTTPHandler(srv *grpc.Server, mux *runtime.ServeMux, ctx context.Context) {
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+
+	if err := paymentpb.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, core.CORE_ADDRESS, opts); err != nil {
+		panic(err)
+	}
 }
