@@ -38,8 +38,7 @@ import (
 	"context"
 	"os"
 
-	"saastack/core" // Assuming this is a common core package for your project
-	// The protobuf import path is now constructed dynamically based on GeneratedPackageName.
+	"saastack/core" 
 	pb "saastack/interfaces/{{.GeneratedPackageName}}/proto"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -49,90 +48,57 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// {{.ServiceName}}Interface defines the interface for the {{.GeneratedPackageName}} service.
-// It embeds the gRPC server interface generated from the proto definition.
 type {{.ServiceName}}Interface interface {
 	pb.{{.ServiceName}}Server
 }
 
-// PluginRegistry defines the interface for a plugin management system.
-// This is a common interface assumed to be used by services for dynamic plugin loading.
 type PluginRegistry interface {
 	GetPlugin(interfaceName, pluginName string) (interface{}, bool)
 }
 
-// {{.ServiceName}} implements the {{.ServiceName}}Server interface generated from the proto definition.
-// It handles gRPC requests and delegates them to registered plugins.
 type {{.ServiceName}} struct {
 	pb.Unimplemented{{.ServiceName}}Server
-	registry PluginRegistry // The plugin registry used to fetch specific plugin implementations.
+	registry PluginRegistry
 }
-
-// New{{.ServiceName}} creates a new instance of {{.ServiceName}}.
-// It requires a PluginRegistry to operate.
 func New{{.ServiceName}}(registry PluginRegistry) *{{.ServiceName}} {
 	return &{{.ServiceName}}{
 		registry: registry,
 	}
 }
 
-// init registers this service with a global registry (assumed to be core.GlobalRegistry).
-// This allows the service to be discovered and used by the application.
-// The service is registered with its derived PluginKey.
 func init() {
-	// Create a new service instance, using the global plugin registry.
 	service := New{{.ServiceName}}(core.GlobalRegistry)
-	// Register the service with the global service registry using its PluginKey.
 	core.GlobalRegistry.RegisterService("{{.PluginKey}}", service)
 }
 
-// RegisterGRPC registers the gRPC service with a gRPC server.
 func (s *{{.ServiceName}}) RegisterGRPC(server *grpc.Server) {
 	pb.Register{{.ServiceName}}Server(server, s)
 }
 
-// RegisterHTTP registers the HTTP gateway handler for the service.
-// This allows the service to be exposed over HTTP via grpc-gateway.
 func (s *{{.ServiceName}}) RegisterHTTP(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
 	return pb.Register{{.ServiceName}}HandlerFromEndpoint(ctx, mux, endpoint, opts)
 }
 
 {{range .RPCs}}
-// {{.Name}} handles the {{.Name}} gRPC request.
-// It determines the appropriate plugin and delegates the call.
 func (s *{{$.ServiceName}}) {{.Name}}(ctx context.Context, req *pb.{{.RequestType}}) (*pb.{{.ResponseType}}, error) {
-	// Attempt to load environment variables from a .env file.
-	_ = godotenv.Load(".env") // Ignoring error for flexibility
-
-	// Determine the plugin name.
-	// The default plugin name is read from an environment variable derived from the PluginKey
-	// (e.g., NOTIFICATION_PLUGIN, BOOKSTORE_PLUGIN).
+	_ = godotenv.Load(".env")
 	envVarName := "{{ToUpper $.PluginKey}}_PLUGIN"
 	pluginName := os.Getenv(envVarName)
 
-	// If the request message has a 'Plugin' field, its value can override the default plugin name.
-	// This directly follows the user's example: if req.Plugin != ""
-	// WARNING: If 'pb.{{.RequestType}}' does not have a 'Plugin string' field, this will NOT COMPILE.
-	// Ensure your .proto messages define 'string plugin = N;' for relevant request types.
 	if req.Plugin != "" {
 		pluginName = req.Plugin
 	}
 
-	// Retrieve the plugin implementation from the registry.
-	// The interfaceName argument to GetPlugin is the service's PluginKey (e.g., "notification", "bookstore").
 	pluginInstance, ok := s.registry.GetPlugin("{{$.PluginKey}}", pluginName)
 	if !ok {
 		return nil, status.Errorf(codes.Unimplemented, "plugin '%s' for interface '%s' not found", pluginName, "{{$.PluginKey}}")
 	}
 
-	// Assert that the retrieved plugin implements the required service-specific interface
-	// (e.g., {{$.ServiceName}}Interface, which embeds pb.{{$.ServiceName}}Server).
 	servicePlugin, ok := pluginInstance.({{- $.ServiceName -}}Interface)
 	if !ok {
 		return nil, status.Errorf(codes.Internal, "plugin '%s' does not implement required interface {{$.ServiceName}}Interface (for '{{$.PluginKey}}' plugin type)", pluginName)
 	}
 
-	// Delegate the actual RPC call to the corresponding method on the resolved plugin.
 	return servicePlugin.{{.Name}}(ctx, req)
 }
 {{end}}
